@@ -1,0 +1,44 @@
+
+body
+{
+    background-color: gainsboro;
+}
+
+#my-name
+{
+    font-size: 20px;;
+    color: forestgreen
+}
+
+.degree-num
+{
+    font-size: 18px;
+    color: plum;
+}
+
+.harsh
+{
+    color: red;
+    font-style: italic;
+}
+
+.usa
+{
+    color: blue;
+}
+
+.italia
+{
+    color: olive;
+}
+
+#hobbies
+{
+    color: chocolate;
+}
+
+.finisher
+{
+    font-family: 'Lucida Sans';
+    color: blueviolet
+}
