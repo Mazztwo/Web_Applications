@@ -1,0 +1,24 @@
+
+- 6x7 grid, with rows labeled 1-6 and columns labeled A-G
+
+- Each player has 21 tokens
+    - Player one’s tokens are red
+    - Player two’s tokens are black
+
+- Objects to make:
+    - Player
+        - Name
+        - Birthday (Date object)
+    - Board
+        - Rows 1-6 & Cols A-G (7 cols)
+        - function to check if a win
+        - function to place token
+ 
+- To Do:
+    [ ] Create all Objects
+    [ ] Alert to get player names and birthdays
+    [ ] Timer on top
+    [ ] Display Board
+    [ ] Display player's remaining tokens on right and left
+    [ ] Click column to drop token 
+    [ ] Local storage 10 fastest games
