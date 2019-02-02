@@ -1,4 +1,28 @@
-h2
+* 
 {
-    color: green;
+    box-sizing: border-box;
+}
+  
+.row
+{
+    text-align: center;
+}
+
+.column 
+{
+    float: left;
+    padding: 5px;
+    height: 500px; 
+}
+
+.right, .left
+{
+    width: 20%;
+    background-color: paleturquoise;
+}
+  
+.middle 
+{
+    width: 60%;
+    background-color: white;
 }
