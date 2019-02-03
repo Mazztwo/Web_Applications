@@ -82,10 +82,23 @@ function createBoard()
 // This method gets all player-entered data
 function getPlayerData()
 {
+    // Create Player1
     var player_name = prompt("Hello! Please enter your name!", "Enter name here");
-    var player1 = new Player(player_name, 1993, 05, 03);
+    var player_birthday = prompt("Please enter your birthday!", "Enter birthday here");
+    // Use reg-ex to validate the birthday and split accordingly
+    var birthday_array = validateBirthday(player_birthday);
 
+    // Enter valid birthday
+    while ( birthday_array === -1 )
+    {
+
+    }
+    var player1 = new Player(player_name, birthday[0], birthday[1], birthday[2]);
+
+    // Create Player 2
     player_name = prompt("Hello! Please enter your name!", "Enter name here");
+    player_birthday = prompt("Please enter your birthday!", "Enter birthday here");
+    birthday_array = validateBirthday(player_birthday);
     var player2 = new Player(player_name, 1993, 05, 03);
 
     // Add player data to board
@@ -104,7 +117,41 @@ function start()
     createBoard();
 }
 
+/*  This method uses regular expressions to check the entered birthday.
+    The formats below are accepted:
+        MM/DD/YYYY - i.e. 01/01/2019
+        M/D/YYYY - i.e. 1/1/2019
+        MM-DD-YYYY - i.e. 01-01-2019
+        M-D-YYYY - i.e. 1-1-2019
+        MMM. DD, YYYY - i.e. Jan. 01, 2019
+        MMM. D, YYYY - i.e. Jan. 1, 2019
+        MMMMMM DD, YYYY - i.e. January 01, 2019
+        MMMMMM D, YYYY - i.e. January 1, 2019
+
+    If the string entered by the user is valid, this method returns
+    an array with the fllowing structure:
+        [year, month, day]
+*/
+function validateBirthday(birthday)
+{
+    // Pattern: num 1-12 once, followed by /, num 1-31 once, followed by slash, any digit only once  
+    var pattern = /[1-12]{1}\/[1-31]{1}\/[\d]{1}/;
+
+    // successfully split into year,month,day
+    if (pattern.length === 3)
+    {
+        return pattern
+    }
+    else
+    {
+        return -1;
+    }
+}
 
 
 
-start();
+
+console.log(validateBirthda(""));
+
+
+// start();

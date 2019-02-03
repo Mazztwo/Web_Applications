@@ -18,7 +18,7 @@
     [X] Create all Objects
     [X] Alert to get player names and birthdays
     [ ] Timer on top
-    [ ] Display Board
+    [X] Display Board
     [ ] Display player's remaining tokens on right and left
     [ ] Click column to drop token 
     [ ] Local storage 10 fastest games
