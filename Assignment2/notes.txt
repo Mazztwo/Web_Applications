@@ -15,7 +15,7 @@
         - function to place token
  
 - To Do:
-    [ ] Create all Objects
+    [X] Create all Objects
     [X] Alert to get player names and birthdays
     [ ] Timer on top
     [ ] Display Board

@@ -2,10 +2,20 @@
 {
     box-sizing: border-box;
 }
+
+body
+{
+    background-color: rgb(141, 255, 141);
+}
   
 .row
 {
     text-align: center;
+}
+
+.timer
+{
+    height: 50px;
 }
 
 .column 
@@ -18,11 +28,22 @@
 .right, .left
 {
     width: 20%;
-    background-color: paleturquoise;
 }
   
 .middle 
 {
     width: 60%;
-    background-color: white;
+    background-color: rgb(97, 195, 255);
+}
+
+.cell
+{
+    background-color: rgb(250, 230, 9);
+}
+
+table
+{
+    height: 100%;
+    width: 100%;
+    background-color: lightskyblue;
 }

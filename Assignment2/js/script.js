@@ -38,9 +38,9 @@ function Board()
 function createBoard()
 {
     // parent = div in html where game board goes
-    var parent = document.querySelector("#game");
+    var parent = document.getElementById("game");
 
-    // htmlBoard = actual table to inject into parents
+    // htmlBoard = actual table to inject into parent
     var htmlBoard = document.createElement("table");
 
     // Set the id of the table to "board"
@@ -49,23 +49,62 @@ function createBoard()
     // Append the game board to the game divs
     parent.append(htmlBoard);
 
+    // Create cells
+    for(var r = 0; r < 6; r++)
+    {
+        // Create row element to insert cells
+        var row = document.createElement("tr");
 
+        for(var c = 0; c < 7; c++)
+        {
+            // Create cell to insert into row
+            var col= document.createElement("td");
+
+            // Add cell class to the newly created element
+            col.classList.add("cell");
+
+             // This element is the white token picture provided.
+            // The image source points to the images folder.
+            var no_token = document.createElement("img");
+            no_token.src = "images/white-circle.png"
+
+            // Add blank token
+            col.appendChild(no_token);
+
+            // Add cell to row
+            row.appendChild(col);
+        }
+
+        htmlBoard.appendChild(row);
+    }
 }
 
-/*
-alert("hi!");
-var me = new Player("Alessio", 1993, 05, 03);
-alert("Hello: " + me.name);
-alert("Your birthday is: " + me.birthday.toDateString());
-*/
+// This method gets all player-entered data
+function getPlayerData()
+{
+    var player_name = prompt("Hello! Please enter your name!", "Enter name here");
+    var player1 = new Player(player_name, 1993, 05, 03);
 
-/*
-var player_name = prompt("Hello! Please enter your name!", "Enter name here");
-var player1 = new Player(player_name, 1993, 05, 03);
+    player_name = prompt("Hello! Please enter your name!", "Enter name here");
+    var player2 = new Player(player_name, 1993, 05, 03);
 
-player_name = prompt("Hello! Please enter your name!", "Enter name here");
-var player2 = new Player(player_name, 1993, 05, 03);
+    // Add player data to board
+    document.getElementById("player1").innerHTML += player1.name;
+    document.getElementById("player2").innerHTML += player2.name;
+}
 
-document.querySelector("#p1").createTextNode(player1.name);
-document.querySelector("#p2").createTextNode(player2.name);
-*/
+// This function will act as a main method and will initialize everything
+function start()
+{
+
+    // Get player names and birthdays
+    // getPlayerData();
+
+    // Create game board
+    createBoard();
+}
+
+
+
+
+start();
