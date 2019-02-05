@@ -5,6 +5,7 @@ function Player(name, year, month, day)
 {
     this.name = name;
     this.birthday = new Date(year,month,day);
+    this.tokens_left = 21;
 
     return this;
 }
@@ -79,31 +80,42 @@ function createBoard()
     }
 }
 
-// This method gets all player-entered data
+// This method gets all player-entered data and returns an array of two players
 function getPlayerData()
 {
     // Create Player1
     var player_name = prompt("Hello! Please enter your name!", "Enter name here");
-    var player_birthday = prompt("Please enter your birthday!", "Enter birthday here");
+    // var player_birthday = prompt("Please enter your birthday!", "Enter birthday here");
     // Use reg-ex to validate the birthday and split accordingly
-    var birthday_array = validateBirthday(player_birthday);
+    // var birthday_array = validateBirthday(player_birthday);
 
     // Enter valid birthday
-    while ( birthday_array === -1 )
-    {
+    //while ( birthday_array === -1 )
+    //{
 
-    }
-    var player1 = new Player(player_name, birthday[0], birthday[1], birthday[2]);
+    //}
+    //var player1 = new Player(player_name, birthday[0], birthday[1], birthday[2]);
+    var player1 = new Player(player_name, 1993, 05, 03);
 
     // Create Player 2
     player_name = prompt("Hello! Please enter your name!", "Enter name here");
-    player_birthday = prompt("Please enter your birthday!", "Enter birthday here");
-    birthday_array = validateBirthday(player_birthday);
+    //player_birthday = prompt("Please enter your birthday!", "Enter birthday here");
+    // birthday_array = validateBirthday(player_birthday);
     var player2 = new Player(player_name, 1993, 05, 03);
 
     // Add player data to board
-    document.getElementById("player1").innerHTML += player1.name;
-    document.getElementById("player2").innerHTML += player2.name;
+    document.getElementById("p1_name").innerHTML = player1.name;
+    document.getElementById("p2_name").innerHTML = player2.name;
+    updateTokensLeft(player1, player2);
+
+    return [player1, player2];
+}
+
+// This method updates the tokens left for each player on the board
+function updateTokensLeft(player1, player2)
+{
+    document.getElementById("p1_tokens").innerHTML = player1.tokens_left;
+    document.getElementById("p2_tokens").innerHTML = player2.tokens_left;
 }
 
 // This function will act as a main method and will initialize everything
@@ -111,10 +123,12 @@ function start()
 {
 
     // Get player names and birthdays
-    // getPlayerData();
+    getPlayerData();
 
-    // Create game board
+    // Create game board to display
     createBoard();
+
+
 }
 
 /*  This method uses regular expressions to check the entered birthday.
@@ -123,10 +137,10 @@ function start()
         M/D/YYYY - i.e. 1/1/2019
         MM-DD-YYYY - i.e. 01-01-2019
         M-D-YYYY - i.e. 1-1-2019
-        MMM. DD, YYYY - i.e. Jan. 01, 2019
+        MM hnjmM. DD, YYYY - i.e. Jan. 01, 2019
         MMM. D, YYYY - i.e. Jan. 1, 2019
         MMMMMM DD, YYYY - i.e. January 01, 2019
-        MMMMMM D, YYYY - i.e. January 1, 2019
+        MMMMMM D, YYYY - i.e. January 1, 2019cvx z
 
     If the string entered by the user is valid, this method returns
     an array with the fllowing structure:
@@ -135,12 +149,14 @@ function start()
 function validateBirthday(birthday)
 {
     // Pattern: num 1-12 once, followed by /, num 1-31 once, followed by slash, any digit only once  
-    var pattern = /[1-12]{1}\/[1-31]{1}\/[\d]{1}/;
+    var pattern = /([1-9]|1)[0-2]?/;
+
+    var b_day_split = birthday.split(pattern) ;             
 
     // successfully split into year,month,day
-    if (pattern.length === 3)
+    if (b_day_split.length === 3)
     {
-        return pattern
+        return b_day_split;
     }
     else
     {
@@ -148,10 +164,4 @@ function validateBirthday(birthday)
     }
 }
 
-
-
-
-console.log(validateBirthda(""));
-
-
-// start();
+start();
