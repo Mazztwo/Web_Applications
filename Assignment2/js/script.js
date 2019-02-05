@@ -13,7 +13,7 @@ function Player(name, year, month, day)
 // Board object
 function Board()
 {
-    this.board = [ 
+    this.rows = [ 
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
@@ -27,9 +27,41 @@ function Board()
         return true;
     }
 
-    this.placeToken = function(col)
-    {
-        return true;
+    // Given a column, place a token in the lowest possible row.
+    // Returns true/false based upon success/falure token placement
+    this.placeToken = function(col, player)
+    {   
+        for(var row = 5; row >= 0; row--)
+        {   
+            // Check each row and place token in lowest 
+            if ( this.rows[row][col] === 0)
+            {
+                // Update internal game representation
+                this.rows[row][col] = 1;
+
+                // Update board to display token
+                // Get the current row and cell, and change its source image
+                // based on which player's turn it is.
+                if (player === 1)
+                {
+                    // Get curr row
+                    var curr_row = document.getElementById("r"+row);
+                    // Grab the cell, and the corresponding image, and change its source
+                    curr_row.cells[col].children[0].src = "images/black-circle.png"
+                }
+                else
+                {
+                    // Get curr row
+                    var curr_row = document.getElementById("r"+row);
+                    // Grab the cell, and the corresponding image, and change its source
+                    curr_row.cells[col].children[0].src = "images/red-circle.png"
+                }
+
+                return true;
+            }
+        }
+
+        return false;;
     }
 
     return this;
@@ -55,6 +87,7 @@ function createBoard()
     {
         // Create row element to insert cells
         var row = document.createElement("tr");
+        row.id = "r" + r;
 
         for(var c = 0; c < 7; c++)
         {
@@ -66,11 +99,12 @@ function createBoard()
 
              // This element is the white token picture provided.
             // The image source points to the images folder.
-            var no_token = document.createElement("img");
-            no_token.src = "images/white-circle.png"
+            var cell_image = document.createElement("img");
+            cell_image.src = "images/white-circle.png"
+            cell_image.id = "c" + c;
 
             // Add blank token
-            col.appendChild(no_token);
+            col.appendChild(cell_image);
 
             // Add cell to row
             row.appendChild(col);
@@ -103,6 +137,15 @@ function getPlayerData()
     // birthday_array = validateBirthday(player_birthday);
     var player2 = new Player(player_name, 1993, 05, 03);
 
+
+    // BEFORE CREATING PLAYERS, VALIDATE BIRTHDAY AND MAKE PLAYER1 THE
+    // OLDEST (LEFT) AND PLAYER2 THE OTHER (RIGHT)
+
+
+
+
+
+
     // Add player data to board
     document.getElementById("p1_name").innerHTML = player1.name;
     document.getElementById("p2_name").innerHTML = player2.name;
@@ -122,13 +165,23 @@ function updateTokensLeft(player1, player2)
 function start()
 {
 
-    // Get player names and birthdays
-    getPlayerData();
+    // Create players and get their information
+    var players = getPlayerData();
 
     // Create game board to display
     createBoard();
 
+    // Create board object to hold information about game
+    var game_board = new Board();
 
+    return [players, game_board];
+}
+
+
+// This function will act as the game loop
+function gameLoop(players, board)
+{
+    board.placeToken(3,1);
 }
 
 /*  This method uses regular expressions to check the entered birthday.
@@ -164,4 +217,7 @@ function validateBirthday(birthday)
     }
 }
 
-start();
+// START GAME HERE
+// start_info = [players, board]
+var start_info = start();
+gameLoop(start_info[0],start_info[1]);
