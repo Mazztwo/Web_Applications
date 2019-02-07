@@ -1,3 +1,10 @@
+// Global var holding which player's turn it is.
+// The value is 1 for Player1 and 2 for Player2
+var turn = 1;
+
+// Globals holding each player and the board representation
+var player1, player2;
+var game_board = new Board;
 
 
 // Player Object
@@ -24,7 +31,7 @@ function Board()
 
     this.isWin = function ()
     {
-        return true;
+        return false;
     }
 
     // Given a column, place a token in the lowest possible row.
@@ -57,9 +64,23 @@ function Board()
                     curr_row.cells[col].children[0].src = "images/red-circle.png"
                 }
 
+                // Make turn next player's
+                if ( turn === 1 )
+                {
+                    turn = 2;
+                }
+                else
+                {
+                    turn = 1;
+                }
+
                 return true;
             }
         }
+
+        // Token could not be placed. Alert player that column is full
+        // and to pick another column to place token.
+        alert("Column is full! Please place token in free column!");
 
         return false;;
     }
@@ -97,11 +118,23 @@ function createBoard()
             // Add cell class to the newly created element
             col.classList.add("cell");
 
+            // Set the cell's id to the proper column
+            col.id = c;
+
              // This element is the white token picture provided.
             // The image source points to the images folder.
             var cell_image = document.createElement("img");
             cell_image.src = "images/white-circle.png"
-            cell_image.id = "c" + c;
+
+            // I know it's normally bad practice to have multiple elements have the same ID,
+            // but in this case I want that functionality. Becuase I set the callback function
+            // to activate when a user clicks on either a cell or the image, it's still the same
+            // column regardless and so I don't care if they have the same ID because what i'll need
+            // is the column number.
+            cell_image.id = c;
+              
+            // Add event listener to cell
+            col.addEventListener("click", placeTokenOnBoard);
 
             // Add blank token
             col.appendChild(cell_image);
@@ -112,6 +145,13 @@ function createBoard()
 
         htmlBoard.appendChild(row);
     }
+}
+
+// This is the callback function for clicking on the board
+function placeTokenOnBoard(event)
+{
+    game_board.placeToken(event.target.id, turn);
+    
 }
 
 // This method gets all player-entered data and returns an array of two players
@@ -129,13 +169,13 @@ function getPlayerData()
 
     //}
     //var player1 = new Player(player_name, birthday[0], birthday[1], birthday[2]);
-    var player1 = new Player(player_name, 1993, 05, 03);
+    player1 = new Player(player_name, 1993, 05, 03);
 
     // Create Player 2
     player_name = prompt("Hello! Please enter your name!", "Enter name here");
     //player_birthday = prompt("Please enter your birthday!", "Enter birthday here");
     // birthday_array = validateBirthday(player_birthday);
-    var player2 = new Player(player_name, 1993, 05, 03);
+    player2 = new Player(player_name, 1993, 05, 03);
 
 
     // BEFORE CREATING PLAYERS, VALIDATE BIRTHDAY AND MAKE PLAYER1 THE
@@ -149,39 +189,14 @@ function getPlayerData()
     // Add player data to board
     document.getElementById("p1_name").innerHTML = player1.name;
     document.getElementById("p2_name").innerHTML = player2.name;
-    updateTokensLeft(player1, player2);
-
-    return [player1, player2];
+    updateTokensLeft();
 }
 
 // This method updates the tokens left for each player on the board
-function updateTokensLeft(player1, player2)
+function updateTokensLeft()
 {
     document.getElementById("p1_tokens").innerHTML = player1.tokens_left;
     document.getElementById("p2_tokens").innerHTML = player2.tokens_left;
-}
-
-// This function will act as a main method and will initialize everything
-function start()
-{
-
-    // Create players and get their information
-    var players = getPlayerData();
-
-    // Create game board to display
-    createBoard();
-
-    // Create board object to hold information about game
-    var game_board = new Board();
-
-    return [players, game_board];
-}
-
-
-// This function will act as the game loop
-function gameLoop(players, board)
-{
-    board.placeToken(3,1);
 }
 
 /*  This method uses regular expressions to check the entered birthday.
@@ -217,7 +232,23 @@ function validateBirthday(birthday)
     }
 }
 
-// START GAME HERE
-// start_info = [players, board]
-var start_info = start();
-gameLoop(start_info[0],start_info[1]);
+
+
+// This function will act as the game loop
+function gameLoop(players, board)
+{   
+    // Continue game while neither player has won
+    //while( board.isWin() === false )
+    //{
+
+    //}
+}
+
+////// START GAME HERE //////
+
+// Create players and get their information
+getPlayerData();
+// Create game board to display
+createBoard();
+// Start Game loop
+gameLoop();
