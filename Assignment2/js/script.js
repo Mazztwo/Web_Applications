@@ -30,22 +30,48 @@ function Board()
         {
             for(var col = 0; col < 7; col++)
             {
-                // Check up
+                // Check up/down
                 if( (row-3) >= 0 )
                 {
-                    if( game_board[row][col] === 1 && 
-                        game_board[row-1][col] === 1 &&
-                        game_board[row-2][col] === 1 &&
-                        game_board[row-3][col] === 1 )
+                    if( game_board.rows[row][col] === 1 && 
+                        game_board.rows[row-1][col] === 1 &&
+                        game_board.rows[row-2][col] === 1 &&
+                        game_board.rows[row-3][col] === 1 )
+                    {
+                        return true;
+                    }
+
+                    if( game_board.rows[row][col] === 2 && 
+                        game_board.rows[row-1][col] === 2 &&
+                        game_board.rows[row-2][col] === 2 &&
+                        game_board.rows[row-3][col] === 2 )
+                    {
+                        return true;
+                    }
+
+                    // Check diagonals up-right and up-left
+                    
+
+                }
+                // Check left/right
+                if( (col-3) >= 0 )
+                {
+                    if( game_board.rows[row][col] === 1 && 
+                        game_board.rows[row][col-1] === 1 &&
+                        game_board.rows[row][col-2] === 1 &&
+                        game_board.rows[row][col-3] === 1 )
+                    {
+                        return true;
+                    }
+
+                    if( game_board.rows[row][col] === 2 && 
+                        game_board.rows[row][col-1] === 2 &&
+                        game_board.rows[row][col-2] === 2 &&
+                        game_board.rows[row][col-3] === 2 )
                     {
                         return true;
                     }
                 }
-                // Check down
-
-                // Check left
-
-                // Check right
             }
         }
         
@@ -61,9 +87,6 @@ function Board()
             // Check each row and place token in lowest 
             if ( this.rows[row][col] === 0)
             {
-                // Update internal game representation
-                this.rows[row][col] = 1;
-
                 // Update board to display token
                 // Get the current row and cell, and change its source image
                 // based on which player's turn it is.
@@ -73,6 +96,9 @@ function Board()
                     var curr_row = document.getElementById("r"+row);
                     // Grab the cell, and the corresponding image, and change its source
                     curr_row.cells[col].children[0].src = "images/black-circle.png"
+
+                    // Update internal game representation
+                    this.rows[row][col] = 1;
                 }
                 else
                 {
@@ -80,6 +106,9 @@ function Board()
                     var curr_row = document.getElementById("r"+row);
                     // Grab the cell, and the corresponding image, and change its source
                     curr_row.cells[col].children[0].src = "images/red-circle.png"
+
+                    // Update internal game representation
+                    this.rows[row][col] = 2;
                 }
 
                 // Make turn next players and decrement curr player tokens
@@ -172,34 +201,18 @@ function placeTokenOnBoard(event)
 {
     game_board.placeToken(event.target.id);
     updateTokensLeft();
-
-    // Check for win
-    if ( game_board.isWin )
-    {   
-        var winner;
-        if ( turn === 1 ) 
-        {
-            winner = player1.name;
-        }
-        else
-        {
-            winner = player2.name;
-        }
-
-        alert("Congrats to " + winner + " for winning in !!??TIME??!!");
-
-        resetGame();
-    }
 }
 
 // This method gets all player-entered data and returns an array of two players
 function getPlayerData()
 {
     // Create Player1
-    var player_name = prompt("Hello! Please enter your name!", "Enter name here");
+    //var player_name = prompt("Hello! Please enter your name!", "Enter name here");
     // var player_birthday = prompt("Please enter your birthday!", "Enter birthday here");
     // Use reg-ex to validate the birthday and split accordingly
     // var birthday_array = validateBirthday(player_birthday);
+
+    var player_name = "!!!"
 
     // Enter valid birthday
     //while ( birthday_array === -1 )
@@ -210,7 +223,7 @@ function getPlayerData()
     player1 = new Player(player_name, 1993, 05, 03);
 
     // Create Player 2
-    player_name = prompt("Hello! Please enter your name!", "Enter name here");
+    //player_name = prompt("Hello! Please enter your name!", "Enter name here");
     //player_birthday = prompt("Please enter your birthday!", "Enter birthday here");
     // birthday_array = validateBirthday(player_birthday);
     player2 = new Player(player_name, 1993, 05, 03);
@@ -218,9 +231,6 @@ function getPlayerData()
 
     // BEFORE CREATING PLAYERS, VALIDATE BIRTHDAY AND MAKE PLAYER1 THE
     // OLDEST (LEFT) AND PLAYER2 THE OTHER (RIGHT)
-
-
-
 
 
 
@@ -235,6 +245,7 @@ function updateTokensLeft()
 {
     document.getElementById("p1_tokens").innerHTML = player1.tokens_left;
     document.getElementById("p2_tokens").innerHTML = player2.tokens_left;
+    window.dispatchEvent(new Event('checkForWin'));
 }
 
 /*  This method uses regular expressions to check the entered birthday.
@@ -291,6 +302,7 @@ function resetGame()
     // Reset player tokens
     player1.tokens_left = 21;
     player2.tokens_left = 21;
+    updateTokensLeft();
 
     // Reset timer
     // XXXXXXXXXXXXXX
@@ -302,12 +314,14 @@ function resetGame()
     turn = 1;
 }
 
-
 // This function clears the tokens from the board
 function clearTokens()
 {
-    
+    var board = document.getElementById("board");
+    board.parentNode.removeChild(board);
+    renderBoard();
 }
+
 
 ////// START GAME HERE //////
 
@@ -325,3 +339,24 @@ getPlayerData();
 // Create game board to display
 renderBoard();
 
+// Add event listener for a win condition
+window.addEventListener('checkForWin', function(e) {
+
+    if (game_board.isWin())
+    {
+        var winner;
+        if ( turn === 1)
+        {
+            winner = player1.name;
+        }
+        else
+        {
+            winner = player2.name;
+        }
+
+        setTimeout( function() {alert("Congratulations to " + winner + " for winning in ?!TIME!?")}, 500 );
+
+        // Reset the game
+        resetGame()
+    }
+});
