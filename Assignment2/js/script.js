@@ -1,11 +1,5 @@
-// Global var holding which player's turn it is.
-// The value is 1 for Player1 and 2 for Player2
-var turn = 1;
-
-// Globals holding each player and the board representation
-var player1, player2;
-var game_board = new Board;
-
+// Alessio Mazzone
+///////////////////////////
 
 // Player Object
 function Player(name, year, month, day)
@@ -29,14 +23,38 @@ function Board()
         [0,0,0,0,0,0,0]
     ];
 
+    // Checks current board to see if either player has won
     this.isWin = function ()
     {
+        for(var row = 0; row < 6; row++)
+        {
+            for(var col = 0; col < 7; col++)
+            {
+                // Check up
+                if( (row-3) >= 0 )
+                {
+                    if( game_board[row][col] === 1 && 
+                        game_board[row-1][col] === 1 &&
+                        game_board[row-2][col] === 1 &&
+                        game_board[row-3][col] === 1 )
+                    {
+                        return true;
+                    }
+                }
+                // Check down
+
+                // Check left
+
+                // Check right
+            }
+        }
+        
         return false;
     }
 
     // Given a column, place a token in the lowest possible row.
     // Returns true/false based upon success/falure token placement
-    this.placeToken = function(col, player)
+    this.placeToken = function(col)
     {   
         for(var row = 5; row >= 0; row--)
         {   
@@ -49,7 +67,7 @@ function Board()
                 // Update board to display token
                 // Get the current row and cell, and change its source image
                 // based on which player's turn it is.
-                if (player === 1)
+                if (turn === 1)
                 {
                     // Get curr row
                     var curr_row = document.getElementById("r"+row);
@@ -64,13 +82,15 @@ function Board()
                     curr_row.cells[col].children[0].src = "images/red-circle.png"
                 }
 
-                // Make turn next player's
+                // Make turn next players and decrement curr player tokens
                 if ( turn === 1 )
                 {
+                    player1.tokens_left--;
                     turn = 2;
                 }
                 else
                 {
+                    player2.tokens_left--;
                     turn = 1;
                 }
 
@@ -89,7 +109,7 @@ function Board()
 }
 
 // This method creates the game board
-function createBoard()
+function renderBoard()
 {
     // parent = div in html where game board goes
     var parent = document.getElementById("game");
@@ -150,8 +170,26 @@ function createBoard()
 // This is the callback function for clicking on the board
 function placeTokenOnBoard(event)
 {
-    game_board.placeToken(event.target.id, turn);
-    
+    game_board.placeToken(event.target.id);
+    updateTokensLeft();
+
+    // Check for win
+    if ( game_board.isWin )
+    {   
+        var winner;
+        if ( turn === 1 ) 
+        {
+            winner = player1.name;
+        }
+        else
+        {
+            winner = player2.name;
+        }
+
+        alert("Congrats to " + winner + " for winning in !!??TIME??!!");
+
+        resetGame();
+    }
 }
 
 // This method gets all player-entered data and returns an array of two players
@@ -205,10 +243,10 @@ function updateTokensLeft()
         M/D/YYYY - i.e. 1/1/2019
         MM-DD-YYYY - i.e. 01-01-2019
         M-D-YYYY - i.e. 1-1-2019
-        MM hnjmM. DD, YYYY - i.e. Jan. 01, 2019
+        MMM. DD, YYYY - i.e. Jan. 01, 2019
         MMM. D, YYYY - i.e. Jan. 1, 2019
         MMMMMM DD, YYYY - i.e. January 01, 2019
-        MMMMMM D, YYYY - i.e. January 1, 2019cvx z
+        MMMMMM D, YYYY - i.e. January 1, 2019
 
     If the string entered by the user is valid, this method returns
     an array with the fllowing structure:
@@ -232,23 +270,58 @@ function validateBirthday(birthday)
     }
 }
 
+// When game ends, this function will reset the game.
+function resetGame()
+{
+    // Reset the game board, no need to create a new object.
+    // Having direct access to object properties isn't great,
+    // but it's fine for this tiny case.
+    game_board.rows = [ 
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0]
+    ];
+
+    // Clear tokens from board
+    clearTokens();
+
+    // Reset player tokens
+    player1.tokens_left = 21;
+    player2.tokens_left = 21;
+
+    // Reset timer
+    // XXXXXXXXXXXXXX
+
+    // Store score/time/stuff in local storage
+    // XXXXXXXXXXXXXX
+
+    // Reset turn
+    turn = 1;
+}
 
 
-// This function will act as the game loop
-function gameLoop(players, board)
-{   
-    // Continue game while neither player has won
-    //while( board.isWin() === false )
-    //{
-
-    //}
+// This function clears the tokens from the board
+function clearTokens()
+{
+    
 }
 
 ////// START GAME HERE //////
 
+// Holds which player's turn it is.
+// The value is 1 for Player1 and 2 for Player2
+var turn = 1;
+
+// Initialize players and board.
+var player1, player2;
+var game_board = new Board();
+
 // Create players and get their information
 getPlayerData();
+
 // Create game board to display
-createBoard();
-// Start Game loop
-gameLoop();
+renderBoard();
+
