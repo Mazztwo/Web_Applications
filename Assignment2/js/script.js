@@ -30,7 +30,7 @@ function Board()
         {
             for(var col = 0; col < 7; col++)
             {
-                // Check up/down
+                // Check up/down for each player
                 if( (row-3) >= 0 )
                 {
                     if( game_board.rows[row][col] === 1 && 
@@ -49,8 +49,45 @@ function Board()
                         return true;
                     }
 
-                    // Check diagonals up-right and up-left
-                    
+                    // Check diagonals up-left
+                    if( (col-3) >= 0)
+                    {
+                        if( game_board.rows[row][col] === 1 && 
+                            game_board.rows[row-1][col-1] === 1 &&
+                            game_board.rows[row-2][col-2] === 1 &&
+                            game_board.rows[row-3][col-3] === 1 )
+                        {
+                            return true;
+                        }
+
+                        if( game_board.rows[row][col] === 2 && 
+                            game_board.rows[row-1][col-1] === 2 &&
+                            game_board.rows[row-2][col-2] === 2 &&
+                            game_board.rows[row-3][col-3] === 2 )
+                        {
+                            return true;
+                        }
+                    }
+
+                    // Check diagonals up-right
+                    if( (col+3) <= 6)
+                    {
+                        if( game_board.rows[row][col] === 1 && 
+                            game_board.rows[row-1][col+1] === 1 &&
+                            game_board.rows[row-2][col+2] === 1 &&
+                            game_board.rows[row-3][col+3] === 1 )
+                        {
+                            return true;
+                        }
+
+                        if( game_board.rows[row][col] === 2 && 
+                            game_board.rows[row-1][col+1] === 2 &&
+                            game_board.rows[row-2][col+2] === 2 &&
+                            game_board.rows[row-3][col+3] === 2 )
+                        {
+                            return true;
+                        }
+                    }
 
                 }
                 // Check left/right
@@ -71,7 +108,46 @@ function Board()
                     {
                         return true;
                     }
+
+                    // Check diagonals down-left
+                    if( (row+3) <= 5)
+                    {
+                        if( game_board.rows[row][col] === 1 && 
+                            game_board.rows[row+1][col-1] === 1 &&
+                            game_board.rows[row+2][col-2] === 1 &&
+                            game_board.rows[row+3][col-3] === 1 )
+                        {
+                            return true;
+                        }
+
+                        if( game_board.rows[row][col] === 2 && 
+                            game_board.rows[row+1][col-1] === 2 &&
+                            game_board.rows[row+2][col-2] === 2 &&
+                            game_board.rows[row+3][col-3] === 2 )
+                        {
+                            return true;
+                        }
+                    }
                 }
+                // Check diagonals down-right
+                if ( ((row+3) <= 5) && ((col+3) <=6) )
+                {
+                    if( game_board.rows[row][col] === 1 && 
+                        game_board.rows[row+1][col+1] === 1 &&
+                        game_board.rows[row+2][col+2] === 1 &&
+                        game_board.rows[row+3][col+3] === 1 )
+                    {
+                        return true;
+                    }
+
+                    if( game_board.rows[row][col] === 2 && 
+                        game_board.rows[row+1][col+1] === 2 &&
+                        game_board.rows[row+2][col+2] === 2 &&
+                        game_board.rows[row+3][col+3] === 2 )
+                    {
+                        return true;
+                    }
+                } 
             }
         }
         

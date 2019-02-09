@@ -23,7 +23,7 @@
     [X] Display Board
     [X] Display player's remaining tokens on right and left
     [X] Click column to drop token 
-    [ ] Create algorithm to check if any players won
+    [X] Create algorithm to check if any players won
     [ ] Local storage 10 fastest games
 
 LAYOUT:
