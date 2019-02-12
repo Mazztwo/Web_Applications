@@ -171,7 +171,7 @@ function Board()
                     // Get curr row
                     var curr_row = document.getElementById("r"+row);
                     // Grab the cell, and the corresponding image, and change its source
-                    curr_row.cells[col].children[0].src = "images/black-circle.png"
+                    curr_row.cells[col].children[0].src = "images/red-circle.png"
 
                     // Update internal game representation
                     this.rows[row][col] = 1;
@@ -181,7 +181,7 @@ function Board()
                     // Get curr row
                     var curr_row = document.getElementById("r"+row);
                     // Grab the cell, and the corresponding image, and change its source
-                    curr_row.cells[col].children[0].src = "images/red-circle.png"
+                    curr_row.cells[col].children[0].src = "images/black-circle.png"
 
                     // Update internal game representation
                     this.rows[row][col] = 2;
@@ -213,7 +213,7 @@ function Board()
     return this;
 }
 
-// This method creates the game board
+// This method creates and renders the game board
 function renderBoard()
 {
     // parent = div in html where game board goes
@@ -270,6 +270,71 @@ function renderBoard()
 
         htmlBoard.appendChild(row);
     }
+}
+
+// This method creates and renders the HiScores table
+function renderHiscores()
+{
+
+    // parent = div in html where game board goes
+    var parent = document.getElementById("game");
+
+    // Remove game board
+    parent.removeChild(parent.childNodes[0]);
+
+    // htmlBoard = actual table to inject into parent
+    var hiscores = document.createElement("hiscores");
+
+    // Set the id of the table to "board"
+    hiscores.id = "hiscores";
+
+    // Append the game board to the game divs
+    parent.append(hiscores);
+
+    // Create title row element
+    var hiscores_title = document.createElement("div");
+    hiscores_title.innerHTML = "HiScores";
+    hiscores.appendChild(hiscores_title);
+
+    // Create Headers for winner and time elapsed
+    var titles = document.createElement("tr");
+    var col_t1 = document.createElement("td");
+    var col_t2 = document.createElement("td");
+    col_t1.innerHTML = "Winner Name";
+    col_t2.innerHTML = "Time to Win";
+    col_t1.classList.add("tit");
+    col_t2.classList.add("tit");
+    titles.appendChild(col_t1);
+    titles.appendChild(col_t2);
+    hiscores.appendChild(titles);
+
+    // Create cells
+    for(var r = 0; r < 10; r++)
+    {
+        // Create row element to insert cells
+        var row = document.createElement("tr");
+        row.id = "r" + r;
+
+        for(var c = 0; c < 2; c++)
+        {
+            // Create cell to insert into row
+            var col= document.createElement("td");
+
+            // Set the cell's id to the proper column
+            col.id = c;
+            
+            // Add blank data
+            col.innerHTML = "--";
+
+            // Syle cell
+            col.classList.add("hiscore_entry");
+
+            // Add cell to row
+            row.appendChild(col);
+        }
+
+        hiscores.appendChild(row);
+    }    
 }
 
 // This is the callback function for clicking on the board
@@ -343,9 +408,6 @@ function checkForWin()
 
         alert("Congratulations! " + winner + " won in " + min + " minutes and " + sec + " seconds.");
 
-        sec = 0;
-        min = 0;
-
         // Reset the game
         resetGame()
     }
@@ -399,17 +461,22 @@ function resetGame()
     ];
 
     // Clear tokens from board
-    clearTokens();
+    //clearTokens();
+
+    // Display HiScore table
+    renderHiscores();
 
     // Reset player tokens
     player1.tokens_left = 21;
     player2.tokens_left = 21;
     updateTokensLeft();
 
-    // Reset timer
-
-    // Store score/stuff in local storage
+    // Store everything in local storage!
     // XXXXXXXXXXXXXX
+
+    // Reset time
+    sec = 0;
+    min = 0;
 
     // Reset turn
     turn = 1;
