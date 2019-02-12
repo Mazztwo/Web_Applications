@@ -9,13 +9,13 @@ body
 }
   
 .row
-{
+{   
     text-align: center;
 }
 
 .timer
 {
-    height: 50px;
+    margin: 15px;
 }
 
 .column 
@@ -48,10 +48,16 @@ table
     background-color: lightskyblue;
 }
 
+button
+{   
+    margin: 10px;
+    padding: 10px;
+}
+
 .hiscore_entry
 {
     text-align: center;
-    padding: 9px;
+    padding: 10px;
 }
 
 .tit

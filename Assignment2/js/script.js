@@ -282,6 +282,11 @@ function renderHiscores()
     // Remove game board
     parent.removeChild(parent.childNodes[0]);
 
+    // Stop timer
+    clearInterval(time_interval);
+    time_interval = 0;
+    document.getElementById("timer").innerHTML = "HiScores";
+
     // htmlBoard = actual table to inject into parent
     var hiscores = document.createElement("hiscores");
 
@@ -290,11 +295,6 @@ function renderHiscores()
 
     // Append the game board to the game divs
     parent.append(hiscores);
-
-    // Create title row element
-    var hiscores_title = document.createElement("div");
-    hiscores_title.innerHTML = "HiScores";
-    hiscores.appendChild(hiscores_title);
 
     // Create Headers for winner and time elapsed
     var titles = document.createElement("tr");
@@ -386,8 +386,7 @@ function updateTokensLeft()
 {
     document.getElementById("p1_tokens").innerHTML = player1.tokens_left;
     document.getElementById("p2_tokens").innerHTML = player2.tokens_left;
-
-    setTimeout(checkForWin, 250);
+    setTimeout(checkForWin, 200);
 }
 
 // This function checks the board for a win and displays appropirate alerts to users
@@ -490,28 +489,49 @@ function clearTokens()
     renderBoard();
 }
 
+// This function starts the game.
+// button_press = argument that tells function from where it was called.
+// button_press = 0 --> function was called from within the javascript
+// button_press = 1 --> function called from button press 
+function startGame(button_press)
+{
+    if (button_press)
+    {
+        // Remove game board
+        var parent = document.getElementById("game");
+        parent.removeChild(parent.childNodes[0]);
 
-////// START GAME HERE //////
+        // Restart time interval if button is pressed while HiScores are showing
+        if(time_interval === 0)
+        {
+            time_interval = setInterval(timer,1000);
+        }
+        // The interval for the timer is already set. Just reset minutes and seconds.
+        else
+        {
+            min = 0;
+            sec = 0;
+        }
+    }
+    // Clear game representation
+    game_board.rows = [ 
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0]
+    ];
 
-// Holds which player's turn it is.
-// value=1 --> player1 turn, value=2 --> player2 turn
-var turn = 1;
+    // gather player data and set objects accordingly
+    getPlayerData();
 
-// Initialize players and board.
-var player1, player2;
-var game_board = new Board();
+    // Create game board to display
+    renderBoard();
+}
 
-// gather player data and set objects accordingly
-getPlayerData();
-
-// Create game board to display
-renderBoard();
-
-// Timer Calculations
-var sec = 0
-var min = 0;
-var timer = setInterval(function(){
-   
+function timer()
+{
     document.getElementById("timer").innerHTML = min + " minutes : " + sec + " seconds";
     
     if ( sec < 59 )
@@ -523,5 +543,22 @@ var timer = setInterval(function(){
         min = min + 1;
         sec = 0;
     }
+}
 
-}, 1000);
+
+////// START GAME HERE //////
+
+// Holds which player's turn it is.
+// value=1 --> player1 turn, value=2 --> player2 turn
+var turn = 1;
+
+// Initialize players and board.
+var player1, player2;
+var game_board = new Board();
+
+startGame(0);
+
+// Timer Calculations
+var sec = 0
+var min = 0;
+var time_interval = setInterval(timer, 1000);
