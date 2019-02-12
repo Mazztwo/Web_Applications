@@ -19,7 +19,7 @@
     [X] Alert to get player names and birthdays
     [ ] Regex to validate birthdays
     [ ] Regex to split birthdays into Year, Month, Day
-    [ ] Timer on top
+    [X] Timer on top
     [X] Display Board
     [X] Display player's remaining tokens on right and left
     [X] Click column to drop token 

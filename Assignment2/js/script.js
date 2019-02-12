@@ -1,6 +1,9 @@
 // Alessio Mazzone
 ///////////////////////////
 
+var sec = 0
+var min = 0;
+
 // Player Object
 function Player(name, year, month, day)
 {
@@ -321,7 +324,28 @@ function updateTokensLeft()
 {
     document.getElementById("p1_tokens").innerHTML = player1.tokens_left;
     document.getElementById("p2_tokens").innerHTML = player2.tokens_left;
-    window.dispatchEvent(new Event('checkForWin'));
+
+    // Check for win
+    if (game_board.isWin())
+    {
+        var winner;
+        if ( turn === 1)
+        {
+            winner = player1.name;
+        }
+        else
+        {
+            winner = player2.name;
+        }
+
+        alert("Congratulations! " + winner + " won in " + min + " minutes and " + sec + " seconds.");
+
+        sec = 0;
+        min = 0;
+
+        // Reset the game
+        resetGame()
+    }
 }
 
 /*  This method uses regular expressions to check the entered birthday.
@@ -341,20 +365,19 @@ function updateTokensLeft()
 */
 function validateBirthday(birthday)
 {
-    // Pattern: num 1-12 once, followed by /, num 1-31 once, followed by slash, any digit only once  
-    var pattern = /([1-9]|1)[0-2]?/;
+   
+    /* 
+    ^(\d{1,2}|\w{3})(?:\/|-)(\d{1,2})(?:\/|-)(\d{4})$
 
-    var b_day_split = birthday.split(pattern) ;             
+    01-31-1966
+    1-3-3333
+    jan/12/1201
+    jan/1/1928
+    Jun-13/2229
 
-    // successfully split into year,month,day
-    if (b_day_split.length === 3)
-    {
-        return b_day_split;
-    }
-    else
-    {
-        return -1;
-    }
+    */
+
+    // https://regex101.com
 }
 
 // When game ends, this function will reset the game.
@@ -381,9 +404,8 @@ function resetGame()
     updateTokensLeft();
 
     // Reset timer
-    // XXXXXXXXXXXXXX
 
-    // Store score/time/stuff in local storage
+    // Store score/stuff in local storage
     // XXXXXXXXXXXXXX
 
     // Reset turn
@@ -415,24 +437,20 @@ getPlayerData();
 // Create game board to display
 renderBoard();
 
-// Add event listener for a win condition
-window.addEventListener('checkForWin', function(e) {
 
-    if (game_board.isWin())
+// Timer Calculations
+var timer = setInterval(function(){
+   
+    document.getElementById("timer").innerHTML = min + " minutes : " + sec + " seconds";
+    
+    if ( sec < 59 )
     {
-        var winner;
-        if ( turn === 1)
-        {
-            winner = player1.name;
-        }
-        else
-        {
-            winner = player2.name;
-        }
-
-        setTimeout( function() {alert("Congratulations to " + winner + " for winning in ?!TIME!?")}, 500 );
-
-        // Reset the game
-        resetGame()
+        sec = sec + 1;
     }
-});
+    else
+    {
+        min = min + 1;
+        sec = 0;
+    }
+
+}, 1000);
