@@ -1,9 +1,6 @@
 // Alessio Mazzone
 ///////////////////////////
 
-var sec = 0
-var min = 0;
-
 // Player Object
 function Player(name, year, month, day)
 {
@@ -279,7 +276,7 @@ function renderBoard()
 function placeTokenOnBoard(event)
 {
     game_board.placeToken(event.target.id);
-    updateTokensLeft();
+    updateTokensLeft()
 }
 
 // This method gets all player-entered data and returns an array of two players
@@ -325,6 +322,12 @@ function updateTokensLeft()
     document.getElementById("p1_tokens").innerHTML = player1.tokens_left;
     document.getElementById("p2_tokens").innerHTML = player2.tokens_left;
 
+    setTimeout(checkForWin, 250);
+}
+
+// This function checks the board for a win and displays appropirate alerts to users
+function checkForWin()
+{
     // Check for win
     if (game_board.isWin())
     {
@@ -424,21 +427,22 @@ function clearTokens()
 ////// START GAME HERE //////
 
 // Holds which player's turn it is.
-// The value is 1 for Player1 and 2 for Player2
+// value=1 --> player1 turn, value=2 --> player2 turn
 var turn = 1;
 
 // Initialize players and board.
 var player1, player2;
 var game_board = new Board();
 
-// Create players and get their information
+// gather player data and set objects accordingly
 getPlayerData();
 
 // Create game board to display
 renderBoard();
 
-
 // Timer Calculations
+var sec = 0
+var min = 0;
 var timer = setInterval(function(){
    
     document.getElementById("timer").innerHTML = min + " minutes : " + sec + " seconds";
