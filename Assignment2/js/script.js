@@ -366,12 +366,11 @@ function placeTokenOnBoard(event)
 function getPlayerData()
 {
     // Create Player1
-    //var player_name = prompt("Hello! Please enter your name!", "Enter name here");
+    var player_name = prompt("Hello! Please enter your name!", "Enter name here");
     // var player_birthday = prompt("Please enter your birthday!", "Enter birthday here");
     // Use reg-ex to validate the birthday and split accordingly
     // var birthday_array = validateBirthday(player_birthday);
 
-    var player_name = "!!!"
 
     // Enter valid birthday
     //while ( birthday_array === -1 )
@@ -382,7 +381,7 @@ function getPlayerData()
     player1 = new Player(player_name, 1993, 05, 03);
 
     // Create Player 2
-    //player_name = prompt("Hello! Please enter your name!", "Enter name here");
+    player_name = prompt("Hello! Please enter your name!", "Enter name here");
     //player_birthday = prompt("Please enter your birthday!", "Enter birthday here");
     // birthday_array = validateBirthday(player_birthday);
     player2 = new Player(player_name, 1993, 05, 03);
@@ -469,8 +468,8 @@ function resetGame()
         [0,0,0,0,0,0,0]
     ];
 
-     // Store everything in local storage!
-     storeScores();
+    // Store everything in local storage!
+    storeScores();
 
     // Display HiScore table
     renderHiscores();
@@ -519,6 +518,9 @@ function startGame(button_press)
             min = 0;
             sec = 0;
         }
+
+        // reset turn
+        turn = 1;
     }
     // Clear game representation
     game_board.rows = [ 
@@ -607,11 +609,13 @@ function storeScores()
     }
 }
 
-// Returns the name of the winner
+// Returns the name of the winner. Since the win check happens after the token has been
+// placed, the turn will actually have already gone to the next player because baoard.placeToken
+// has already changed turn. 
 function getWinnerName()
 {
     var winner;
-    if ( turn === 1)
+    if (turn === 2)
     {
         winner = player1.name;
     }
