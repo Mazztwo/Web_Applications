@@ -395,15 +395,7 @@ function checkForWin()
     // Check for win
     if (game_board.isWin())
     {
-        var winner;
-        if ( turn === 1)
-        {
-            winner = player1.name;
-        }
-        else
-        {
-            winner = player2.name;
-        }
+        var winner = getWinnerName();
 
         alert("Congratulations! " + winner + " won in " + min + " minutes and " + sec + " seconds.");
 
@@ -545,6 +537,62 @@ function timer()
     }
 }
 
+/* This function populates the Hiscores table from local storage data
+   Data is in the form:
+   {
+       0: [player_name, time_to_victory]
+       ....
+       ....
+   }
+   lists fastests 10 games
+*/
+function populateHiscoresFromStorage()
+{
+    // If nothing in local storage, store current time and winner
+    if (localStorage.length === 0)
+    {   
+        var winner = getWinnerName();
+        var time_to_win = min + "m : " + sec + " s";
+
+        var hiscore_table = { 0 : [winner, time_to_win]};
+        localStorage.setItem("hiscores", JSON.stringify(hiscore_table));
+        
+    }
+    // Grab HiScores table from local storage
+    else
+    {
+        var hiscore_table = JSON.parse(localStorage.getItem("hiscores"));
+        var len = hiscore_table.length;
+
+        // if length is less than 10, go to the nth entry and add data
+        if (len < 10 )
+        {
+            var winner = getWinnerName();
+            var time_to_win = min + "m : " + sec + " s";
+            hiscore_table[len] = [winner, time_to_win];
+        }
+        else
+        {
+
+        }
+    }
+}
+
+// Returns the name of the winner
+function getWinnerName()
+{
+    var winner;
+    if ( turn === 1)
+    {
+        winner = player1.name;
+    }
+    else
+    {
+        winner = player2.name;
+    }
+
+    return winner;
+}
 
 ////// START GAME HERE //////
 
