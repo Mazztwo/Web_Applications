@@ -275,7 +275,6 @@ function renderBoard()
 // This method creates and renders the HiScores table
 function renderHiscores()
 {
-
     // parent = div in html where game board goes
     var parent = document.getElementById("game");
 
@@ -288,7 +287,7 @@ function renderHiscores()
     document.getElementById("timer").innerHTML = "HiScores";
 
     // htmlBoard = actual table to inject into parent
-    var hiscores = document.createElement("hiscores");
+    var hiscores = document.createElement("table");
 
     // Set the id of the table to "board"
     hiscores.id = "hiscores";
@@ -334,7 +333,26 @@ function renderHiscores()
         }
 
         hiscores.appendChild(row);
-    }    
+    }   
+    
+    // Get data from local storage to place into table
+    storageToTable();
+}
+
+function storageToTable()
+{
+    var tab = document.getElementById("hiscores");
+    var children = tab.childNodes;
+    var hiscores = JSON.parse(localStorage.getItem("hiscores"));
+    var len = Object.keys(hiscores).length;
+
+    // Go through every row in table and populate from localStorage data.
+    // Skip row 1 because that is where the row headers are.
+    for(var i = 1; i < len; i++)
+    {
+        children[i].childNodes[0].innerHTML = hiscores[i][0];
+        children[i].childNodes[1].innerHTML = hiscores[i][1];
+    }
 }
 
 // This is the callback function for clicking on the board
@@ -451,8 +469,8 @@ function resetGame()
         [0,0,0,0,0,0,0]
     ];
 
-    // Clear tokens from board
-    //clearTokens();
+     // Store everything in local storage!
+     storeScores();
 
     // Display HiScore table
     renderHiscores();
@@ -461,9 +479,6 @@ function resetGame()
     player1.tokens_left = 21;
     player2.tokens_left = 21;
     updateTokensLeft();
-
-    // Store everything in local storage!
-    // XXXXXXXXXXXXXX
 
     // Reset time
     sec = 0;
@@ -546,13 +561,13 @@ function timer()
    }
    lists fastests 10 games
 */
-function populateHiscoresFromStorage()
+function storeScores()
 {
     // If nothing in local storage, store current time and winner
     if (localStorage.length === 0)
     {   
         var winner = getWinnerName();
-        var time_to_win = min + "m : " + sec + " s";
+        var time_to_win = min + "m : " + sec + "s";
 
         var hiscore_table = { 0 : [winner, time_to_win]};
         localStorage.setItem("hiscores", JSON.stringify(hiscore_table));
@@ -562,19 +577,33 @@ function populateHiscoresFromStorage()
     else
     {
         var hiscore_table = JSON.parse(localStorage.getItem("hiscores"));
-        var len = hiscore_table.length;
+        var len = Object.keys(hiscore_table).length
+        var winner = getWinnerName();
+        var time_to_win = min + "m : " + sec + "s";
 
         // if length is less than 10, go to the nth entry and add data
         if (len < 10 )
         {
-            var winner = getWinnerName();
-            var time_to_win = min + "m : " + sec + " s";
             hiscore_table[len] = [winner, time_to_win];
         }
         else
         {
+            // There are already 10 entries in the hiscores. Replace the one with the highest time.
+            var greatest = [0, hiscore_table[0][1]];
 
+            // Get longest time
+            for(var i = 1; i < 10; i++)
+            {
+                if(hiscore_table[i][1] > greatest[1])
+                {
+                    greatest = [i, hiscore_table[i][1]];
+                }
+            }
+
+            // Found greatest time and index. Overrride it with new data.
+            hiscore_table[greatest[0]] = [winner, time_to_win];
         }
+        localStorage.setItem("hiscores", JSON.stringify(hiscore_table));
     }
 }
 
