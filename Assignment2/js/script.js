@@ -300,7 +300,7 @@ function renderHiscores()
     var col_t1 = document.createElement("td");
     var col_t2 = document.createElement("td");
     col_t1.innerHTML = "Winner Name";
-    col_t2.innerHTML = "Time to Win";
+    col_t2.innerHTML = "Time to Win (mm:ss)";
     col_t1.classList.add("tit");
     col_t2.classList.add("tit");
     titles.appendChild(col_t1);
@@ -539,6 +539,7 @@ function startGame(button_press)
     renderBoard();
 }
 
+
 function timer()
 {
     document.getElementById("timer").innerHTML = min + " minutes : " + sec + " seconds";
@@ -569,7 +570,7 @@ function storeScores()
     if (localStorage.length === 0)
     {   
         var winner = getWinnerName();
-        var time_to_win = min + "m : " + sec + "s";
+        var time_to_win = min + ":" + sec ;
 
         var hiscore_table = { 0 : [winner, time_to_win]};
         localStorage.setItem("hiscores", JSON.stringify(hiscore_table));
@@ -581,29 +582,36 @@ function storeScores()
         var hiscore_table = JSON.parse(localStorage.getItem("hiscores"));
         var len = Object.keys(hiscore_table).length
         var winner = getWinnerName();
-        var time_to_win = min + "m : " + sec + "s";
-
+ 
         // if length is less than 10, go to the nth entry and add data
         if (len < 10 )
         {
-            hiscore_table[len] = [winner, time_to_win];
+            hiscore_table[len] = [winner, min + ":" + sec];
         }
         else
         {
-            // There are already 10 entries in the hiscores. Replace the one with the highest time.
-            var greatest = [0, hiscore_table[0][1]];
+            var values = hiscore_table[0][1].split(":");
+            var greatest_hiscore_time = (parseInt(values[0]) * 60) + parseInt(values[1]);
+            var greatest_index = 0;
+            var curr_values;
+            var curr_hiscore_time;
 
-            // Get longest time
+            // Find a longer time than current win time
             for(var i = 1; i < 10; i++)
             {
-                if(hiscore_table[i][1] > greatest[1])
-                {
-                    greatest = [i, hiscore_table[i][1]];
-                }
-            }
+                // Converts mm:ss timet to just seconds for comparison
+                curr_values = hiscore_table[i][1].split(":");
+                curr_hiscore_time = (parseInt(curr_values[0]) * 60) + parseInt(curr_values[1]);
 
-            // Found greatest time and index. Overrride it with new data.
-            hiscore_table[greatest[0]] = [winner, time_to_win];
+                if(curr_hiscore_time > greatest_hiscore_time)
+                {
+                    // Found time greater than curr win time
+                    greatest_hiscore_time = curr_hiscore_time;
+                    greatest_index = i;
+                }
+            }       
+            
+            hiscore_table[greatest_index] = [winner, min + ":" + sec];
         }
         localStorage.setItem("hiscores", JSON.stringify(hiscore_table));
     }
