@@ -348,10 +348,10 @@ function storageToTable()
 
     // Go through every row in table and populate from localStorage data.
     // Skip row 1 because that is where the row headers are.
-    for(var i = 1; i < len; i++)
+    for(var i = 1; i <= len; i++)
     {
-        children[i].childNodes[0].innerHTML = hiscores[i][0];
-        children[i].childNodes[1].innerHTML = hiscores[i][1];
+        children[i].childNodes[0].innerHTML = hiscores[i-1][0];
+        children[i].childNodes[1].innerHTML = hiscores[i-1][1];
     }
 }
 
