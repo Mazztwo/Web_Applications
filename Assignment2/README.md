@@ -1,12 +1,10 @@
 # Connect 4 -- <Replace with your name>
 
-Name: <Full Name>
-Pitt ID: <ID>
-
-## Installation
-
-1. Instructions to get your code up and running.
+Name: Alessio Mazzone
+Pitt ID: 3708465
 
 ## Running the App
+1. Open connect-four.html with Chrome.
+2. Follow prompts as per Assignment Two specification guidelines.
 
-1. Instructions to run your application.
+

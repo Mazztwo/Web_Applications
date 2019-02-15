@@ -361,16 +361,6 @@ function placeTokenOnBoard(event)
 {
     game_board.placeToken(event.target.id);
     updateTokensLeft();
-
-    if(turn == 1)
-    {
-        alert("Click OK to begin " + player1.name + "\'s turn.");
-    }
-    else
-    {
-        alert("Click OK to begin " + player2.name + "\'s turn.");
-    }
-
 }
 
 // This method gets all player-entered data and returns an array of two players
@@ -404,9 +394,6 @@ function getPlayerData()
     document.getElementById("p1_name").innerHTML = player1.name;
     document.getElementById("p2_name").innerHTML = player2.name;
     updateTokensLeft();
-
-    // Display player 1 alert
-    alert("Click OK to begin " + player1.name + "\'s turn.");
 }
 
 // This method updates the tokens left for each player on the board
@@ -414,6 +401,7 @@ function updateTokensLeft()
 {
     document.getElementById("p1_tokens").innerHTML = player1.tokens_left;
     document.getElementById("p2_tokens").innerHTML = player2.tokens_left;
+
     setTimeout(checkForWin, 200);
 }
 
@@ -425,10 +413,24 @@ function checkForWin()
     {
         var winner = getWinnerName();
 
+        // Time is one off, subtract.
+        sec = sec - 1;
+
         alert("Congratulations! " + winner + " won in " + min + " minutes and " + sec + " seconds.");
 
         // Reset the game
         resetGame()
+    }
+    else
+    {
+        if(turn == 1)
+        {
+            alert("Click OK to begin " + player1.name + "\'s turn.");
+        }
+        else
+        {
+            alert("Click OK to begin " + player2.name + "\'s turn.");
+        }
     }
 }
 
@@ -448,7 +450,7 @@ function checkForWin()
 */
 function processBirthday(birthday)
 {
-    var re = /^(\d{1,2}|[A-Za-z]{3,9})(\/|-|. | )(\d{1,2})(?:\2|, )(\d+)$/
+    var re = /^(\d{1,2}|[A-Za-z]{3,9})(\/|-|. | )(\d{1,2})(?:\2|, )(\d{4})$/
     var match = re.test(birthday)
     
     // Validate birthday using regex
