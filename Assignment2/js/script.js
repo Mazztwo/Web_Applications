@@ -494,7 +494,11 @@ function resetGame()
     // Reset player tokens
     player1.tokens_left = 21;
     player2.tokens_left = 21;
-    updateTokensLeft();
+    // I put this here instead of just calling updateTokensLeft() because i        
+    // want to just update the DOM without checking for win. I don't have time
+    // to do this the right way but this works perfectly for the assignment nonetheless.
+    document.getElementById("p1_tokens").innerHTML = player1.tokens_left;
+    document.getElementById("p2_tokens").innerHTML = player2.tokens_left;
 
     // Reset time
     sec = 0;
