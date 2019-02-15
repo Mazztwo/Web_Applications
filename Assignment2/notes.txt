@@ -24,7 +24,7 @@
     [X] Display player's remaining tokens on right and left
     [X] Click column to drop token 
     [X] Create algorithm to check if any players won
-    [ ] Local storage 10 fastest games
+    [X] Local storage 10 fastest games
 
 LAYOUT:
 P1    TIMER     P2

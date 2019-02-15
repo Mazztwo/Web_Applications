@@ -1,11 +1,12 @@
 // Alessio Mazzone
 ///////////////////////////
 
+
 // Player Object
-function Player(name, year, month, day)
+function Player(name, birthday)
 {
     this.name = name;
-    this.birthday = new Date(year,month,day);
+    this.birthday = birthday;
     this.tokens_left = 21;
 
     return this;
@@ -359,43 +360,53 @@ function storageToTable()
 function placeTokenOnBoard(event)
 {
     game_board.placeToken(event.target.id);
-    updateTokensLeft()
+    updateTokensLeft();
+
+    if(turn == 1)
+    {
+        alert("Click OK to begin " + player1.name + "\'s turn.");
+    }
+    else
+    {
+        alert("Click OK to begin " + player2.name + "\'s turn.");
+    }
+
 }
 
 // This method gets all player-entered data and returns an array of two players
 function getPlayerData()
 {
     // Create Player1
-    var player_name = prompt("Hello! Please enter your name!", "Enter name here");
-    // var player_birthday = prompt("Please enter your birthday!", "Enter birthday here");
+    var player_name1 = prompt("Hello user 1! Please enter your name!", "Enter name here");
+    var player_birthday1 = prompt("Please enter your birthday!", "Enter birthday here");
     // Use reg-ex to validate the birthday and split accordingly
-    // var birthday_array = validateBirthday(player_birthday);
-
-
-    // Enter valid birthday
-    //while ( birthday_array === -1 )
-    //{
-
-    //}
-    //var player1 = new Player(player_name, birthday[0], birthday[1], birthday[2]);
-    player1 = new Player(player_name, 1993, 05, 03);
-
+    var date_object1 = processBirthday(player_birthday1);
+    
     // Create Player 2
-    player_name = prompt("Hello! Please enter your name!", "Enter name here");
-    //player_birthday = prompt("Please enter your birthday!", "Enter birthday here");
-    // birthday_array = validateBirthday(player_birthday);
-    player2 = new Player(player_name, 1993, 05, 03);
+    var player_name2 = prompt("Hello user 2! Please enter your name!", "Enter name here");
+    var player_birthday2 = prompt("Please enter your birthday!", "Enter birthday here");
+    // Use reg-ex to validate the birthday and split accordingly
+    var date_object2 = processBirthday(player_birthday2);
 
-
-    // BEFORE CREATING PLAYERS, VALIDATE BIRTHDAY AND MAKE PLAYER1 THE
-    // OLDEST (LEFT) AND PLAYER2 THE OTHER (RIGHT)
-
-
+    // Set oldest player to player1 and other to player2
+    if (date_object1 < date_object2)
+    {
+        player1 = new Player(player_name1, date_object1);
+        player2 = new Player(player_name2, date_object2);
+    }
+    else
+    {
+        player1 = new Player(player_name2, date_object2);
+        player2 = new Player(player_name1, date_object1);
+    }
 
     // Add player data to board
     document.getElementById("p1_name").innerHTML = player1.name;
     document.getElementById("p2_name").innerHTML = player2.name;
     updateTokensLeft();
+
+    // Display player 1 alert
+    alert("Click OK to begin " + player1.name + "\'s turn.");
 }
 
 // This method updates the tokens left for each player on the board
@@ -433,24 +444,28 @@ function checkForWin()
         MMMMMM D, YYYY - i.e. January 1, 2019
 
     If the string entered by the user is valid, this method returns
-    an array with the fllowing structure:
-        [year, month, day]
+    a valid date object.
 */
-function validateBirthday(birthday)
+function processBirthday(birthday)
 {
-   
-    /* 
-    ^(\d{1,2}|\w{3})(?:\/|-)(\d{1,2})(?:\/|-)(\d{4})$
+    var re = /^(\d{1,2}|[A-Za-z]{3,9})(\/|-|. | )(\d{1,2})(?:\2|, )(\d+)$/
+    var match = re.test(birthday)
+    
+    // Validate birthday using regex
+    while(!match)
+    {
+        birthday = prompt("Birthday format not valid. Please enter your birthday!", "Enter valid birthday here");
+        match = re.test(birthday);
+    }
 
-    01-31-1966
-    1-3-3333
-    jan/12/1201
-    jan/1/1928
-    Jun-13/2229
+    // Parse birthday with regex and create date object
+    var info = re.exec(birthday);
+    var month = info[1];
+    var day = info[3];
+    var year = info[4];
+    var date_obj = new Date(month + " " + day + " " + year);
 
-    */
-
-    // https://regex101.com
+    return date_obj;
 }
 
 // When game ends, this function will reset the game.
@@ -538,7 +553,6 @@ function startGame(button_press)
     // Create game board to display
     renderBoard();
 }
-
 
 function timer()
 {
