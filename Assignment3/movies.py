@@ -1,5 +1,7 @@
 # Alessio Mazzone
 
+# Global movies list
+movies = []
 
 class Media:
     # Media class constructor
@@ -24,42 +26,54 @@ class Media:
         return '-'.join(words)
 
 class Movie(Media):
-    def __init__(self, title): 
+    def __init__(self, title, year, director, runtime): 
         super().__init__(title)
-
-    def Year(self, year):
         self.year = year
-    
-    def Director(self, director):
         self.director = director
-
-    def Runtime(self, runtime):
         self.runtime = runtime
-
+                
     def abbreviation(self):
         return "".join(super().slug().split("-"))[:3]
         
-
     def __repr__(self):
         return "<Movie: " + self.title + ">"
 
     def __str__(self):
         return "(" + str(self.year) + ") " + self.title 
-    
-    
-test1 = Media("Don't Tell Mom the Babysitter's Dead")
-test2 = Media("G.I. Joe")
+   
+   #
 
-print(test1.slug())
-print(test2.slug())
+# Uses a list comprehension to print() each Movie slug.
+def slugs():
+    [print(mov.slug()) for mov in movies]
 
-test3 = Movie("The Lord of @!&#(*@&#)(*! the rings.")
-print(test3.title)
+# Uses a list comprehension to print() each Movie abbreviation.
+def abbr():
+    [print(mov.abbreviation()) for mov in movies]
 
-test4 = Movie("G.I. Joe")
-test4.Year(1980)
-test4.Director("Charles Darwin")
-test4.Runtime(14.223)
+# Define a before_year() function that takes an int 
+# parameter as a year and uses a list comprehension to 
+# print() each Movie object if the movie was released 
+# before a specified year.
+def before_year(year):
+    [print(mov) for mov in movies if mov.year < year]
 
-print(test4)
-print(test4.abbreviation())
+def main():
+
+    print("Thanks for checking the Local Movie Database!")
+    slugs()
+    abbr()
+    before_year(1995)
+    print("Thank you")
+
+if __name__ == '__main__':
+
+    # Add five Movie objects to movies list
+    movies.append(Movie("Don't Tell Mom the Babysitter's Dead", 2018, "John Mink", 114.4))
+    movies.append(Movie("G.I. Joe", 1962, "Harry Mujin", 121.3))
+    movies.append(Movie("The Lord of @!&#(*@&#)(*! The Rings.", 2001, "John Marx", 206.4))
+    movies.append(Movie("Blade Runner", 1985, "Binny Lupo", 102.2))
+    movies.append(Movie("Spider Man and the Lost Arc", 1994, "Peter Pukar", 111.1))
+
+    # Execute main
+    main()
