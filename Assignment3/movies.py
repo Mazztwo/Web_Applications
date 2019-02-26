@@ -43,11 +43,29 @@ class Movie(Media):
    
    #
 
+
+# Define a decorator to use on slugs(), abbr(), and before_year():
+# Decorator should take an argument of msg
+# Prints "=====\n%s\n=====" % msg
+# Add decorator to functions named above, and pass in an appropriate heading message for each function.
+def decor(msg):
+    def wrap(func):
+        def inner(*args, **kwargs):
+            try:
+                print("=====\n%s %s\n=====" % (msg, args[0]))
+            except:
+                print("=====\n%s\n=====" % msg)
+            func(*args, **kwargs)
+        return inner
+    return wrap
+
 # Uses a list comprehension to print() each Movie slug.
+@decor("SLUGS")
 def slugs():
     [print(mov.slug()) for mov in movies]
 
 # Uses a list comprehension to print() each Movie abbreviation.
+@decor("ABBREVIATIONS")
 def abbr():
     [print(mov.abbreviation()) for mov in movies]
 
@@ -55,6 +73,7 @@ def abbr():
 # parameter as a year and uses a list comprehension to 
 # print() each Movie object if the movie was released 
 # before a specified year.
+@decor("BEFORE YEAR")
 def before_year(year):
     [print(mov) for mov in movies if mov.year < year]
 
