@@ -12,9 +12,24 @@ db = SQLAlchemy(app)                                            #
 class Stylist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
+    username = db.Column(db.String(80))
+    password = db.Column(db.String(80))
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, name, username, password):
+        self.name = name   
+        self.username = username
+        self.password = password
+
+class Patron(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80))
+    username = db.Column(db.String(80))
+    password = db.Column(db.String(80))
+
+    def __init__(self, name, username, password):
+        self.name = name   
+        self.username = username
+        self.password = password    
 
 # Default page. Renders login page
 @app.route("/")
@@ -36,7 +51,7 @@ def user_page():
     return redirect(url_for("hello"))
     return render_template("home.html", message="Hello World!", names=names)
     '''
-
+    # Get input from http request
     username = request.form.get("username")
     password = request.form.get("password")
 
@@ -60,8 +75,25 @@ def stylist_creation():
 def patron_creation():
     return render_template("patron_creation.html")
     
+# Creates new patron account
+@app.route("/create-patron-account", methods=["POST"])
+def create_patron():
+    name = request.form.get("name")
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    # Create new patron and add to database
+    new_patron = Patron(name, username, password)
+    db.session.add(new_patron)
+    db.session.commit()
+
+    # Send back to login page
+    return redirect(url_for("login_page"))
+
+
+
 @app.cli.command("createdb")
-def initdb():
+def createdb():
     """Creates SQLite Database"""
     db.drop_all()
     db.create_all()
