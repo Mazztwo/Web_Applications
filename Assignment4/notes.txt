@@ -8,6 +8,10 @@ Open it.
 Then "control+p" to bring up commands.
 ">sqpl". Quick query. "SELECT * FROM table_name"
 
+Setting flask environment variable:
+-----------------------------------
+"export FLASK_APP=salon"
+
 
 Three types of users: Owner, Stylists, Patrons
 ----------------------------------------------

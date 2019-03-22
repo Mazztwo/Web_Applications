@@ -9,14 +9,14 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False            #
 db = SQLAlchemy(app)                                            #
 #################################################################
 
-class Name(db.Model):
+class Stylist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
 
     def __init__(self, name):
         self.name = name
 
-
+# Default page. Renders login page
 @app.route("/")
 def login_page():
     """
@@ -25,16 +25,18 @@ def login_page():
     """
     return render_template("login.html")
 
-
+# Handles login of users.
 @app.route("/user-page/", methods=["POST"])
 def user_page():
+
     '''
     name = Name(request.form.get("name"))
     db.session.add(name)
     db.session.commit()
     return redirect(url_for("hello"))
-    return render_template("owner.html", message="Hello World!", names=names)
+    return render_template("home.html", message="Hello World!", names=names)
     '''
+
     username = request.form.get("username")
     password = request.form.get("password")
 
@@ -42,21 +44,28 @@ def user_page():
         return redirect(url_for("owner_page"))
     else:
         return redirect(url_for("login_page"))
-    
-    
-@app.route("/owner-page", methods=["GET"])
+
+# Renders owner page
+@app.route("/owner-page/", methods=["GET"])
 def owner_page():
     return render_template("owner.html")
 
-    
+# Renders stylist creation page
+@app.route("/stylist-creation/", methods=["GET"])
+def stylist_creation():
+    return render_template("stylist_creation.html")
 
+# Renders patron creation page
+@app.route("/patron-creation/", methods=["GET"])
+def patron_creation():
+    return render_template("patron_creation.html")
+    
 @app.cli.command("createdb")
 def initdb():
     """Creates SQLite Database"""
     db.drop_all()
     db.create_all()
     print("Database initialized.")
-
 
 @app.cli.command("populatedb")
 def cli_names():
@@ -71,7 +80,6 @@ def cli_names():
     db.session.commit()
 
     print("Done adding names.")
-
 
 if __name__ == "__main__":
     app.run()
