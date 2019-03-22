@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 ###### SETUP INFORMATION ########################################
 app = Flask(__name__)                                           #
 app.secret_key = "This is a terrible key"                       #
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///intro.db"    #
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///salon.db"    #
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False            #
 db = SQLAlchemy(app)                                            #
 #################################################################
@@ -18,22 +18,39 @@ class Name(db.Model):
 
 
 @app.route("/")
-def hello():
+def login_page():
+    """
     names = Name.query.all()
     return render_template("home.html", message="Hello World!", names=names)
+    """
+    return render_template("login.html")
 
 
-@app.route("/new-name/", methods=["POST"])
-def new_name():
+@app.route("/user-page/", methods=["POST"])
+def user_page():
+    '''
     name = Name(request.form.get("name"))
-
     db.session.add(name)
     db.session.commit()
-
     return redirect(url_for("hello"))
+    return render_template("owner.html", message="Hello World!", names=names)
+    '''
+    username = request.form.get("username")
+    password = request.form.get("password")
 
+    if(username == "owner" and password == "pass"):
+        return redirect(url_for("owner_page"))
+    else:
+        return redirect(url_for("login_page"))
+    
+    
+@app.route("/owner-page", methods=["GET"])
+def owner_page():
+    return render_template("owner.html")
 
-@app.cli.command("initdb")
+    
+
+@app.cli.command("createdb")
 def initdb():
     """Creates SQLite Database"""
     db.drop_all()
@@ -41,7 +58,7 @@ def initdb():
     print("Database initialized.")
 
 
-@app.cli.command("add_names")
+@app.cli.command("populatedb")
 def cli_names():
     """Adds five names to the names list"""
     print("Adding names...")

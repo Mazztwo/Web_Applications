@@ -1,7 +1,56 @@
-Assignment 4:
+Assignment 4 NOTES
+------------------------------------------------------
 
 
 To view a database:
+-------------------
 Open it. 
 Then "control+p" to bring up commands.
 ">sqpl". Quick query. "SELECT * FROM table_name"
+
+
+Three types of users: Owner, Stylists, Patrons
+----------------------------------------------
+1 Owner
+X Stylists
+X Patrons
+All users have their own username and password
+Patrons can create their own accounts.
+Stylist accounts must be made by owner.
+All users should have access to logout link no matter what page they're on.
+
+
+Owner:
+------
+username - owner
+password - pass
+Once logged in, presented with:
+    -link  to create Stylist login
+    -list for each Stylist with appointments scheduled with them
+        -For each appointment, list contains name of the Patron, date, & time of the appointment
+    -if no appointment scheduled w/ a Stylist, explicitly state this instead of empty list
+    -on Stylist page, owner can see list of all future appointments, including date, time, Patron 
+     Any slot w/o appointment shoudl say so
+    -on Patron page, owner can see list of all future appointments, including date, time, Stylist.
+
+
+Stylists:
+---------
+Hours --> Tu-Sat 10a-8p
+Services --> Haircut, 1 hour
+Once logged in, directed to their profile page
+They should see page with all future appointments including date, time, Patron
+Any slot w/o appointment should say so
+
+
+Patrons:
+--------
+Once logged in, presented w/ page of all stylists.
+Clicking on a stylist brings Patron to that Stylists page.
+    -On that page, Patron can see all appointemnts stylist currently has.
+        -Time slots taken by different patrons other than one logged in should say "Booked"
+    -Patrons can click any empty slot. They are taken to a new page with a form.
+        -Presented with form page to request an appointment.
+Patron also has profile page
+    -shows list of upcoming appointments
+    -can cancel appointments they have made
