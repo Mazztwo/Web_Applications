@@ -1,0 +1,7 @@
+Assignment 4:
+
+
+To view a database:
+Open it. 
+Then "control+p" to bring up commands.
+">sqpl". Quick query. "SELECT * FROM table_name"
