@@ -67,12 +67,12 @@ def owner_page():
 
 # Renders stylist creation page
 @app.route("/stylist-creation/", methods=["GET"])
-def stylist_creation():
+def stylist_creation_page():
     return render_template("stylist_creation.html")
 
 # Renders patron creation page
 @app.route("/patron-creation/", methods=["GET"])
-def patron_creation():
+def patron_creation_page():
     return render_template("patron_creation.html")
     
 # Creates new patron account
@@ -90,6 +90,20 @@ def create_patron():
     # Send back to login page
     return redirect(url_for("login_page"))
 
+# Creates new stylist account
+@app.route("/create-stylist-account", methods=["POST"])
+def create_stylist():
+    name = request.form.get("name")
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    # Create new stylist and add to database
+    new_stylist = Stylist(name, username, password)
+    db.session.add(new_stylist)
+    db.session.commit()
+
+    # Send back to owner page
+    return redirect(url_for("owner_page"))
 
 
 @app.cli.command("createdb")

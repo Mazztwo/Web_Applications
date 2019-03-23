@@ -4,4 +4,13 @@
 
 <h1>Stylist Creation Page</h1>
 
+<div>
+    <form action="{{ url_for('create_stylist') }}" method="post">
+        <input type="text" name="name" value="enter name"/><br>
+        <input type="text" name="username" value="enter username"/><br>
+        <input text="type" name="password" value="enter password"/><br>
+        <input type="submit" value="Create Account"/>
+    </form>
+</div>
+
 {% endblock %}
