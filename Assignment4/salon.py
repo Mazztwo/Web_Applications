@@ -42,7 +42,7 @@ def login_page():
 
 # Handles login of users.
 @app.route("/user-page/", methods=["POST"])
-def user_page():
+def get_user_page():
 
     '''
     name = Name(request.form.get("name"))
@@ -52,32 +52,60 @@ def user_page():
     return render_template("home.html", message="Hello World!", names=names)
     '''
     # Get input from http request
-    username = request.form.get("username")
-    password = request.form.get("password")
+    un = request.form.get("username")
+    pw = request.form.get("password")
 
-    if(username == "owner" and password == "pass"):
+    if(un == "owner" and pw == "pass"):
         return redirect(url_for("owner_page"))
     else:
-        return redirect(url_for("login_page"))
+        # Check if username is in stylist table
+        temp_user = Stylist.query.filter_by(username=un).first()
+        if(temp_user):
+            # Check if stylist password is correct
+            if(temp_user.password == pw):
+                # Take user to their profile
+                return redirect(url_for("stylist_page", stylist=temp_user.name))
+        
+        # Check if username is in patron table
+        temp_user = Patron.query.filter_by(username=un).first()
+        if(temp_user):
+            # Check if patron password is correct
+            if(temp_user.password == pw):
+                # Take user to their profile
+                return redirect(url_for("patron_page", patron=temp_user.name))
+
+        return redirect(url_for("user_not_found_page"))
 
 # Renders owner page
 @app.route("/owner-page/", methods=["GET"])
 def owner_page():
     return render_template("owner.html")
 
+# Renders stylist page
+@app.route("/stylist-page/<stylist>")
+def stylist_page(stylist):
+    styl = Stylist.query.filter_by(name=stylist).first()
+    return render_template("stylist.html", stylist=styl)
+
+# Renders patron page
+@app.route("/patron-page/<patron>")
+def patron_page(patron):
+    pat = Patron.query.filter_by(name=patron).first()
+    return render_template("patron.html", patron=pat)
+
 # Renders stylist creation page
-@app.route("/stylist-creation/", methods=["GET"])
+@app.route("/stylist-creation", methods=["GET"])
 def stylist_creation_page():
     return render_template("stylist_creation.html")
 
-# Renders patron creation page
-@app.route("/patron-creation/", methods=["GET"])
+# Renders patron creation page which allows owner to enter username and pass
+@app.route("/patron-creation", methods=["GET"])
 def patron_creation_page():
     return render_template("patron_creation.html")
     
-# Creates new patron account
+# Creates new patron account with form data provided by html request
 @app.route("/create-patron-account", methods=["POST"])
-def create_patron():
+def create_patron_page():
     name = request.form.get("name")
     username = request.form.get("username")
     password = request.form.get("password")
@@ -92,7 +120,7 @@ def create_patron():
 
 # Creates new stylist account
 @app.route("/create-stylist-account", methods=["POST"])
-def create_stylist():
+def create_stylist_page():
     name = request.form.get("name")
     username = request.form.get("username")
     password = request.form.get("password")
@@ -105,6 +133,10 @@ def create_stylist():
     # Send back to owner page
     return redirect(url_for("owner_page"))
 
+# Renders user not found page
+@app.route("/user-not-found/", methods=["GET"])
+def user_not_found_page():
+    return render_template("wrong_info.html")
 
 @app.cli.command("createdb")
 def createdb():
