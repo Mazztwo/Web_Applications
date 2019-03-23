@@ -79,7 +79,7 @@ def get_user_page():
 # Renders owner page
 @app.route("/owner-page/", methods=["GET"])
 def owner_page():
-    return render_template("owner.html")
+    return render_template("owner.html", stylists=Stylist.query.all())
 
 # Renders stylist page
 @app.route("/stylist-page/<stylist>")
@@ -138,8 +138,8 @@ def create_stylist_page():
 def user_not_found_page():
     return render_template("wrong_info.html")
 
-@app.cli.command("createdb")
-def createdb():
+@app.cli.command("initdb")
+def initdb():
     """Creates SQLite Database"""
     db.drop_all()
     db.create_all()

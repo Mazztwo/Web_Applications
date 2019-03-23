@@ -5,4 +5,8 @@
 <h1>Welcome, {{patron.name}}!</h1>
 
 
+<form action="{{ url_for('login_page') }}" method="get">
+    <input type="submit" value="Log Out"/>
+</form>
+
 {% endblock %}

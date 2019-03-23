@@ -18,5 +18,12 @@
     </ul>
 {% endif %}
 </div>
+<br>
+<br>
+<div>
+    <form action="{{ url_for('login_page') }}" method="get">
+        <input type="submit" value="Log Out"/>
+    </form>
+</div>
 
 {% endblock %}
