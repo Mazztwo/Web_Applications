@@ -14,6 +14,7 @@ class Stylist(db.Model):
     name = db.Column(db.String(80))
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))
+    appointments = db.relationship('Appointment', backref='stylist', lazy=True)
 
     def __init__(self, name, username, password):
         self.name = name   
@@ -25,11 +26,22 @@ class Patron(db.Model):
     name = db.Column(db.String(80))
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))
+    appointments = db.relationship('Appointment', backref='patron', lazy=True)
 
     def __init__(self, name, username, password):
         self.name = name   
         self.username = username
-        self.password = password    
+        self.password = password   
+
+class Appointment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    stylist_id = db.Column(db.Integer, db.ForeignKey('stylist.id'))
+    patron_id = db.Column(db.Integer, db.ForeignKey('patron.id'))
+
+    def __init__(self, stylist, patron, date):
+        self.stylist = stylist   
+        self.patron = patron
+        self.date = date    
 
 # Default page. Renders login page
 @app.route("/")

@@ -3,22 +3,25 @@
 {% block content %}
 
 <h1>Welcome, Owner!</h1>
-
+<div>
+    <h3>Stylists:</h3>        
+    {% if stylists %}
+        {% for stylist in stylists %}
+            <form action="{{ url_for('stylist_page', stylist=stylist.name) }}" method="get">
+                <input type="submit" value="{{stylist.name}}'s Profile Page"/>
+            </form>
+        {% endfor %}
+    {% endif %}
+</div>
+<br>
+<br>
+<br>
+<h3>Options:</h3>
 <div>
     <form action="{{ url_for('stylist_creation_page') }}" method="get">
         <input type="submit" value="Create new stylist login"/>
     </form>
 </div>
-<div>
-    {% if stylists %}
-    <ul>
-    {% for stylist in stylists %}
-        <li>{{stylist.name}}</li>
-    {% endfor %}
-    </ul>
-{% endif %}
-</div>
-<br>
 <br>
 <div>
     <form action="{{ url_for('login_page') }}" method="get">
