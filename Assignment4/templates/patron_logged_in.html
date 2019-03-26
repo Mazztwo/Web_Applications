@@ -20,25 +20,43 @@
         }
 </style>
 
-    <u>Appointments:</u>
-    <br>
-    <br>
-    <table>
-    {% if patron.appointments%}
-        <th>Stylist Name</th>
-        <th>Date & Time</th>
-        {% for appointment in patron.appointments %}
-            <tr>
-                <td>{{ appointment.stylist.name }}</td>
-                <td>{{ appointment.day }}, {{ appointment.time }}</td>
-            </tr>
+<div>
+    <u>Available Stylists (click stylist name to view their profile):</u>  
+    {% if stylists %}
+        <ul>
+        {% for stylist in stylists %}
+            <li>
+            <form action="{{ url_for('stylist_page', stylist=stylist.name) }}" method="get">
+                <input style="background-color:aquamarine" type="submit" value="{{stylist.name}}"/>
+            </form>
+            </li>
         {% endfor %}
+        </ul>
     {% else %}
-        <tr>
-            <td colspan="2">This patron has no appointments scheduled.</td>
-        </tr>
+        <p>No stylists work at the salon!</p>
     {% endif %}
-    </table>    
+</div>
+<br>
+<br>
+<u>Your Scheduled Appointments:</u>
+<br>
+<br>
+<table>
+{% if patron.appointments%}
+    <th>Stylist Name</th>
+    <th>Date & Time</th>
+    {% for appointment in patron.appointments %}
+        <tr>
+            <td>{{ appointment.stylist.name }}</td>
+            <td>{{ appointment.day }}, {{ appointment.time }}</td>
+        </tr>
+    {% endfor %}
+{% else %}
+    <tr>
+        <td colspan="2">This patron has no appointments scheduled.</td>
+    </tr>
+{% endif %}
+</table>    
  
     
 <br>

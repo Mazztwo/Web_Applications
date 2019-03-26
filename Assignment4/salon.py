@@ -152,7 +152,8 @@ def user_not_found_page():
 @app.route("/patron-logged-in-page/<patron>")
 def patron_logged_in_page(patron):
     pat = Patron.query.filter_by(name=patron).first()
-    return render_template("patron_logged_in.html", patron=pat)
+    stylists = Stylist.query
+    return render_template("patron_logged_in.html", patron=pat, stylists=Stylist.query.all())
 
 @app.cli.command("initdb")
 def initdb():
