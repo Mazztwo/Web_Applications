@@ -30,7 +30,7 @@
         {% for appointment in patron.appointments %}
             <tr>
                 <td>{{ appointment.stylist.name }}</td>
-                <td>{{ appointment.date }}</td>
+                <td>{{ appointment.day }}, {{ appointment.time }}</td>
             </tr>
         {% endfor %}
     {% else %}

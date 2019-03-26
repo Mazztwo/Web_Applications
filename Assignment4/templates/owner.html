@@ -17,7 +17,7 @@
                     <li>
                         <form action="{{ url_for('patron_page', patron=appointment.patron.name) }}" method="get">
                             <input style="background-color:burlywood" type="submit" value="{{appointment.patron.name}}"/>
-                            --- {{ appointment.date }}
+                            --- {{ appointment.day }}, {{ appointment.time }}
                         </form>
                     </li>
                 {% endfor %}

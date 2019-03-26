@@ -175,7 +175,7 @@ def bootstrap():
     s2 = Stylist("Stylist2", "s2", "s2")
     a1 = Appointment(day="Thursay", time="6pm")
     a2 = Appointment(day="Tuesday", time="11am")
-    a3 = Appointment(day="Saturday" time="2pm")
+    a3 = Appointment(day="Saturday", time="2pm")
 
     db.session.add(p1)
     db.session.add(p2)

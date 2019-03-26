@@ -2,71 +2,66 @@
 
 {% block content %}
 
-<h1>Stylist: {{stylist.name}}</h1>
-<style>
-        table {
-          border-collapse: collapse;
-          width: 50%;
-        }
-        
-        td, th {
-          border: 1px solid #dddddd;
-          text-align: center;
-          padding: 5px;
-        }
-        
-        tr:nth-child(even) {
-          background-color: #dddddd;
-        }
-</style>
+    <h1>Stylist: {{stylist.name}}</h1>
+    <style>
+            table {
+            border-collapse: collapse;
+            width: 75%;
+            }
+            
+            td, th {
+            border: 1px solid #dddddd;
+            text-align: center;
+            padding: 5px;
+            }
+            
+            tr:nth-child(even) {
+            background-color: #dddddd;
+            }
+    </style>
 
-<u>Appointments (X = Available Slot):</u>
-<br>
-<br>   
-<table>
-    <tr>
-        <th></th>
-        <th>10am</th>
-        <th>11am</th>
-        <th>12pm</th>
-        <th>1pm</th>
-        <th>2pm</th>
-        <th>3pm</th>
-        <th>4pm</th>
-        <th>5pm</th>
-        <th>6pm</th>
-        <th>7pm</th>
-    </tr>
-
-    {% for day in ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]%}
+    <u>Appointments (X = Available Slot):</u>
+    <br>
+    <br>   
+    <table>
         <tr>
-            <th>{{day}}</th>
-            { for time in ["10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm"]}
-                {% if stylist.appointments%}
-                    {% for appointment in stylist.appointments %}
-                        {{ appointment.patron.name }}, {{ appointment.date }}
-                    {% endfor %}
-                {% else %}  
-                    <td>X</td>
-                {% endif%}
-            {% endfor %}
+            <th></th>
+            <th>10am</th>
+            <th>11am</th>
+            <th>12pm</th>
+            <th>1pm</th>
+            <th>2pm</th>
+            <th>3pm</th>
+            <th>4pm</th>
+            <th>5pm</th>
+            <th>6pm</th>
+            <th>7pm</th>
         </tr>
-    {% endfor %}
 
-    {% if stylist.appointments%}
-        {% for appointment in stylist.appointments %}
-            {{ appointment.patron.name }}, {{ appointment.date }}
+        {% for day in ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] %}
+            <tr>
+                <th>{{day}}</th>
+                {% for time in ["10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm"] %}
+                    {% if stylist.appointments %}
+                        {% for appointment in stylist.appointments %}
+                            {% if appointment.day == day and appointment.time == time %}
+                                <td>{{ appointment.patron.name }}</td>
+                            {% else %}
+                                <td>X</td>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}  
+                        <td>X</td>
+                    {% endif%}
+                {% endfor %}
+            </tr>
         {% endfor %}
-    {% endif %}
-</table>
+    </table>
 
-
-
-
-<br>
-<br>
-<form action="{{ url_for('login_page') }}" method="get">
-    <input type="submit" value="Log Out"/>
-</form>
+    <br>
+    <br>
+    <form action="{{ url_for('login_page') }}" method="get">
+        <input type="submit" value="Log Out"/>
+    </form>
 
 {% endblock %}
