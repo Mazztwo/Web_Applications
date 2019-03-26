@@ -173,7 +173,7 @@ def bootstrap():
     p3 = Patron("Patron3", "p3", "p3")
     s1 = Stylist("Stylist1", "s1", "s1")
     s2 = Stylist("Stylist2", "s2", "s2")
-    a1 = Appointment(day="Thursay", time="6pm")
+    a1 = Appointment(day="Thursday", time="6pm")
     a2 = Appointment(day="Tuesday", time="11am")
     a3 = Appointment(day="Saturday", time="2pm")
 
