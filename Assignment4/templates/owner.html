@@ -15,7 +15,7 @@
             {% if stylist.appointments%}
                 {% for appointment in stylist.appointments %}
                     <li>
-                        {{ appointment.patron.name }} -- {{ appointment.date }}
+                        {{ appointment.patron.name }} --- {{ appointment.date }}
                     </li>
                 {% endfor %}
             {% else %}

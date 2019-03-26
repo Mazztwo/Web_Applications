@@ -3,8 +3,39 @@
 {% block content %}
 
 <h1>Patron: {{patron.name}}!</h1>
+<style>
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 70%;
+        }
+        
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 5px;
+        }
+        
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+</style>
+<ul>
+    <u>Appointments:</u>
+    {% if stylist.appointments%}
+        {% for appointment in stylist.appointments %}
+            <li>
+                {{ appointment.patron.name }} --- {{ appointment.date }}
+            </li>
+        {% endfor %}
+        <li>ALL OTHER TIME SLOTS FOR THE WEEK ARE OPEN AND AVAILABLE!</li>
+    {% else %}
+        <li>This stylist has no appointments scheduled.</li>
+    {% endif %}
+    <br>
+</ul>
 
-
+<br>
 <form action="{{ url_for('login_page') }}" method="get">
     <input type="submit" value="Log Out"/>
 </form>

@@ -2,9 +2,50 @@
 
 {% block content %}
 
-<h1>Stylist: {{stylist.name}}!</h1>
+<h1>Stylist: {{stylist.name}}</h1>
+<style>
+        table {
+          border-collapse: collapse;
+          width: 20%;
+        }
+        
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: center;
+          padding: 5px;
+        }
+        
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+</style>
 
-
+    <u>Appointments:</u>
+    <br>
+    <br>
+    <table>
+    {% if stylist.appointments%}
+        <th>Patron Name</th>
+        <th>Date & Time</th>
+        {% for appointment in stylist.appointments %}
+            <tr>
+                <td>{{ appointment.patron.name }}</td>
+                <td>{{ appointment.date }}</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="2">ALL OTHER TIME SLOTS FOR THE WEEK ARE OPEN AND AVAILABLE!</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="2">This stylist has no appointments scheduled.</td>
+        </tr>
+    {% endif %}
+    </table>    
+ 
+    
+<br>
+<br>
 <form action="{{ url_for('login_page') }}" method="get">
     <input type="submit" value="Log Out"/>
 </form>
