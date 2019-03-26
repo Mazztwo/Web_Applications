@@ -4,22 +4,35 @@
 
 <h1>Welcome, Owner!</h1>
 <div>
-    <h3>Stylists:</h3>        
+    <h3><u>Stylists (click stylist name to view their profile):</u></h3>        
     {% if stylists %}
+        <ul>
         {% for stylist in stylists %}
             <form action="{{ url_for('stylist_page', stylist=stylist.name) }}" method="get">
-                <input type="submit" value="{{stylist.name}}'s Profile Page"/>
+                <input type="submit" value="{{stylist.name}}"/>
             </form>
+            Appointments:
+            {% if stylist.appointments%}
+                {% for appointment in stylist.appointments %}
+                    <li>
+                        {{ appointment.patron.name }} -- {{ appointment.date }}
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li>This stylist has no appointments scheduled.</li>
+            {% endif %}
+            <br>
         {% endfor %}
+        </ul>
     {% endif %}
 </div>
 <br>
 <br>
 <br>
-<h3>Options:</h3>
+<h3><u>Options:</u></h3>
 <div>
     <form action="{{ url_for('stylist_creation_page') }}" method="get">
-        <input type="submit" value="Create new stylist login"/>
+        <input type="submit" value="Create New Stylist Login"/>
     </form>
 </div>
 <br>
