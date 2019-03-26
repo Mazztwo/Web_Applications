@@ -4,18 +4,21 @@
 
 <h1>Welcome, Owner!</h1>
 <div>
-    <h3><u>Stylists (click stylist name to view their profile):</u></h3>        
+    <h3><u>Stylists (click stylist/patron name to view their profile):</u></h3>        
     {% if stylists %}
         <ul>
         {% for stylist in stylists %}
             <form action="{{ url_for('stylist_page', stylist=stylist.name) }}" method="get">
-                <input type="submit" value="{{stylist.name}}"/>
+                <input style="background-color:aquamarine" type="submit" value="{{stylist.name}}"/>
             </form>
-            Appointments:
+            <u>Appointments:</u>
             {% if stylist.appointments%}
                 {% for appointment in stylist.appointments %}
                     <li>
-                        {{ appointment.patron.name }} --- {{ appointment.date }}
+                        <form action="{{ url_for('patron_page', patron=appointment.patron.name) }}" method="get">
+                            <input style="background-color:burlywood" type="submit" value="{{appointment.patron.name}}"/>
+                            --- {{ appointment.date }}
+                        </form>
                     </li>
                 {% endfor %}
             {% else %}

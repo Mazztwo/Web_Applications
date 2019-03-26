@@ -6,7 +6,7 @@
 <style>
         table {
           border-collapse: collapse;
-          width: 20%;
+          width: 50%;
         }
         
         td, th {
@@ -20,30 +20,49 @@
         }
 </style>
 
-    <u>Appointments:</u>
-    <br>
-    <br>
-    <table>
+<u>Appointments (X = Available Slot):</u>
+<br>
+<br>   
+<table>
+    <tr>
+        <th></th>
+        <th>10am</th>
+        <th>11am</th>
+        <th>12pm</th>
+        <th>1pm</th>
+        <th>2pm</th>
+        <th>3pm</th>
+        <th>4pm</th>
+        <th>5pm</th>
+        <th>6pm</th>
+        <th>7pm</th>
+    </tr>
+
+    {% for day in ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]%}
+        <tr>
+            <th>{{day}}</th>
+            { for time in ["10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm"]}
+                {% if stylist.appointments%}
+                    {% for appointment in stylist.appointments %}
+                        {{ appointment.patron.name }}, {{ appointment.date }}
+                    {% endfor %}
+                {% else %}  
+                    <td>X</td>
+                {% endif%}
+            {% endfor %}
+        </tr>
+    {% endfor %}
+
     {% if stylist.appointments%}
-        <th>Patron Name</th>
-        <th>Date & Time</th>
         {% for appointment in stylist.appointments %}
-            <tr>
-                <td>{{ appointment.patron.name }}</td>
-                <td>{{ appointment.date }}</td>
-            </tr>
+            {{ appointment.patron.name }}, {{ appointment.date }}
         {% endfor %}
-        <tr>
-            <td colspan="2">ALL OTHER TIME SLOTS FOR THE WEEK ARE OPEN AND AVAILABLE!</td>
-        </tr>
-    {% else %}
-        <tr>
-            <td colspan="2">This stylist has no appointments scheduled.</td>
-        </tr>
     {% endif %}
-    </table>    
- 
-    
+</table>
+
+
+
+
 <br>
 <br>
 <form action="{{ url_for('login_page') }}" method="get">

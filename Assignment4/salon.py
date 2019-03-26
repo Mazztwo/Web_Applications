@@ -35,7 +35,8 @@ class Patron(db.Model):
 
 class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.String(80))
+    day = db.Column(db.String(80))
+    time = db.Column(db.String(80))
     stylist_id = db.Column(db.Integer, db.ForeignKey('stylist.id'))
     patron_id = db.Column(db.Integer, db.ForeignKey('patron.id'))
 
@@ -80,7 +81,7 @@ def get_user_page():
             # Check if patron password is correct
             if(temp_user.password == pw):
                 # Take user to their profile
-                return redirect(url_for("patron_page", patron=temp_user.name))
+                return redirect(url_for("patron_logged_in_page", patron=temp_user.name))
 
         return redirect(url_for("user_not_found_page"))
 
@@ -146,6 +147,13 @@ def create_stylist_page():
 def user_not_found_page():
     return render_template("wrong_info.html")
 
+
+# Renders a logged in patron;s page
+@app.route("/patron-logged-in-page/<patron>")
+def patron_logged_in_page(patron):
+    pat = Patron.query.filter_by(name=patron).first()
+    return render_template("patron_logged_in.html", patron=pat)
+
 @app.cli.command("initdb")
 def initdb():
     """Creates SQLite Database"""
@@ -165,9 +173,9 @@ def bootstrap():
     p3 = Patron("Patron3", "p3", "p3")
     s1 = Stylist("Stylist1", "s1", "s1")
     s2 = Stylist("Stylist2", "s2", "s2")
-    a1 = Appointment(date="Thursay, 6pm")
-    a2 = Appointment(date="Tuesday, 11am")
-    a3 = Appointment(date="Saturday, 2pm")
+    a1 = Appointment(day="Thursay", time="6pm")
+    a2 = Appointment(day="Tuesday", time="11am")
+    a3 = Appointment(day="Saturday" time="2pm")
 
     db.session.add(p1)
     db.session.add(p2)
