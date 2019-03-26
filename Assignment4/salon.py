@@ -14,7 +14,7 @@ class Stylist(db.Model):
     name = db.Column(db.String(80))
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))
-    appointments = db.relationship('Appointment', backref='stylist', lazy=True)
+    appointments = db.relationship('Appointment', backref='stylist', lazy='select')
 
     def __init__(self, name, username, password):
         self.name = name   
@@ -26,7 +26,7 @@ class Patron(db.Model):
     name = db.Column(db.String(80))
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))
-    appointments = db.relationship('Appointment', backref='patron', lazy=True)
+    appointments = db.relationship('Appointment', backref='patron', lazy='select')
 
     def __init__(self, name, username, password):
         self.name = name   
@@ -35,13 +35,9 @@ class Patron(db.Model):
 
 class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.String(80))
     stylist_id = db.Column(db.Integer, db.ForeignKey('stylist.id'))
     patron_id = db.Column(db.Integer, db.ForeignKey('patron.id'))
-
-    def __init__(self, stylist, patron, date):
-        self.stylist = stylist   
-        self.patron = patron
-        self.date = date    
 
 # Default page. Renders login page
 @app.route("/")
@@ -157,19 +153,41 @@ def initdb():
     db.create_all()
     print("Database initialized.")
 
-@app.cli.command("populatedb")
-def cli_names():
-    """Adds five names to the names list"""
-    print("Adding names...")
-    db.session.add(Name("Kazoo"))
-    db.session.add(Name("Nathario"))
-    db.session.add(Name("Lizzymag"))
-    db.session.add(Name("Peppa"))
-    db.session.add(Name("Wesley"))
+@app.cli.command("bootstrap")
+def bootstrap():
+    """Populates database"""
+    db.drop_all()
+    db.create_all()
+    print("Bootstrapping...")
+
+    p1 = Patron("Patron1", "p1", "p1")
+    p2 = Patron("Patron2", "p2", "p2")
+    p3 = Patron("Patron3", "p3", "p3")
+    s1 = Stylist("Stylist1", "s1", "s1")
+    s2 = Stylist("Stylist2", "s2", "s2")
+    a1 = Appointment(date="Thursay, 6pm")
+    a2 = Appointment(date="Tuesday, 11am")
+    a3 = Appointment(date="Saturday, 2pm")
+
+    db.session.add(p1)
+    db.session.add(p2)
+    db.session.add(p3)
+    db.session.add(s1)
+    db.session.add(s2)
+    db.session.add(a1)
+    db.session.add(a2)
+    db.session.add(a3)
+
+    s1.appointments.append(a1)  
+    p1.appointments.append(a1)  
+    s1.appointments.append(a2)
+    p2.appointments.append(a2)
+    s2.appointments.append(a3)
+    p3.appointments.append(a3)
     
     db.session.commit()
 
-    print("Done adding names.")
+    print("Done bootstrapping.")
 
 if __name__ == "__main__":
     app.run()
