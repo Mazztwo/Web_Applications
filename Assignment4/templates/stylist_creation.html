@@ -8,10 +8,11 @@
     <form action="{{ url_for('create_stylist_page') }}" method="post">
         <input type="text" name="name" value="enter name"/><br>
         <input type="text" name="username" value="enter username"/><br>
-        <input text="type" name="password" value="enter password"/><br>
+        <input text="type" name="password" value="enter password"/><br><br>
         <input type="submit" value="Create Account"/>
     </form>
 </div>
+<br>
 <div>
     <form action="{{ url_for('login_page') }}" method="get">
         <input type="submit" value="Log Out"/>

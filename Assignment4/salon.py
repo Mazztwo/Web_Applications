@@ -88,7 +88,7 @@ def get_user_page():
 # Renders owner page
 @app.route("/owner-page/", methods=["GET"])
 def owner_page():
-    return render_template("owner.html", stylists=Stylist.query.all())
+    return render_template("owner.html", stylists=Stylist.query.all(), patrons=Patron.query.all())
 
 # Renders stylist page
 @app.route("/stylist-page/<stylist>")
@@ -148,12 +148,19 @@ def user_not_found_page():
     return render_template("wrong_info.html")
 
 
-# Renders a logged in patron;s page
+# Renders a logged in patron's page
 @app.route("/patron-logged-in-page/<patron>")
 def patron_logged_in_page(patron):
     pat = Patron.query.filter_by(name=patron).first()
     stylists = Stylist.query
     return render_template("patron_logged_in.html", patron=pat, stylists=Stylist.query.all())
+
+# Renders a stylists profile page when a patron is logged in
+@app.route("/<patron>-logged-in-<stylist>-page/")
+def stylist_logged_in_page(patron, stylist):
+    pat = Patron.query.filter_by(name=patron).first()
+    stat = Stylist.query.filter_by(name=stylist).first()
+    return render_template("stylist_logged_in.html",  patron=pat, stylist=stat)
 
 @app.cli.command("initdb")
 def initdb():

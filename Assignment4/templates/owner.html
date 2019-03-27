@@ -47,13 +47,26 @@
             </table>
             <br>
             <br>
-            <br>
         {% endfor %}
     {% endif %}
 </div>
-<br>
-<br>
-<br>
+
+<h3><u>List Of All Patrons In System (click patron name to view their profile):</u></h3>
+<table>
+    {% if patrons %}   
+        {% for patron in patrons %}
+            <tr><td>
+                <form action="{{ url_for('patron_page', patron=patron.name) }}" method="get">
+                        <input style="background-color:burlywood" type="submit" value="{{patron.name}}"/>
+                </form>
+            </td></tr>
+        {% endfor %}
+    {% else %}
+    <tr><td>There are no patrons in the system!</td></tr>
+    {% endif %}
+</table>     
+
+
 <h3><u>Options:</u></h3>
 <div>
     <form action="{{ url_for('stylist_creation_page') }}" method="get">
