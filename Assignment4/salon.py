@@ -167,6 +167,26 @@ def stylist_logged_in_page(patron, stylist):
     stat = Stylist.query.filter_by(name=stylist).first()
     return render_template("stylist_logged_in.html",  patron=pat, stylist=stat)
 
+# Creates new appointment
+@app.route("/confirm-appointment-<stylist>-<patron>-<day>-<time>")
+def confirm_appointment(stylist, patron, day, time):
+
+    # Create new appointment and add to database
+    new_appointment = Appointment(day=day, time=time)
+    db.session.add(new_appointment)
+
+    # Link patron and stylist to appointment
+    pat = Patron.query.filter_by(name=patron).first()
+    stat = Stylist.query.filter_by(name=stylist).first()
+    pat.appointments.append(new_appointment)  
+    stat.appointments.append(new_appointment)  
+
+    db.session.commit()
+
+    # Send to appointment confirmed page
+    return render_template("appointment_confirmed.html", patron=patron, stylist=stylist, day=day, time=time)
+
+
 @app.cli.command("initdb")
 def initdb():
     """Creates SQLite Database"""

@@ -16,7 +16,8 @@
         
 </style>
 
-<h1>Appointment Booking Page:</h1>
+<h1>Your Appointment Has Been Confirmed!</h1>
+<h4>See appointment details below:</h4>
 
 <table>
     <tr><th>Your Name</th><td>{{ patron }}</td> </tr>
@@ -24,13 +25,11 @@
     <tr><th>Day & Time Of Appointment</th><td>{{ day }}, {{ time }}</td></tr>
 </table>
 <br>
-<br>
-<form action="{{ url_for('confirm_appointment', patron=patron, stylist=stylist, day=day, time=time) }}" method="get">
-        <input type="submit" value="Confirm Appointment"/>
-</form>
-<br>
-<form action="{{ url_for('stylist_logged_in_page', patron=patron, stylist=stylist) }}" method="get">
-        <input type="submit" value="Cancel"/>
-</form>
+
+<div>
+    <form action="{{ url_for('patron_logged_in_page', patron=patron) }}" method="get">
+        <input type="submit" value="Back to Profile"/>
+    </form>
+</div>
 
 {% endblock %}
