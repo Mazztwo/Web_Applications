@@ -55,14 +55,14 @@
                         {% endfor %}
                         {% if ns.apt %}
                             <td>
-                                <form action="{{ url_for('book_appointment_page', patron=patron.name, stylist=stylist.name) }}" method="get">
+                                <form action="{{ url_for('book_appointment_page', patron=patron.name, stylist=stylist.name, day=day, time=time) }}" method="get">
                                         <input style="background-color:burlywood" type="submit" value="X"/>
                                 </form>  
                             </td>
                         {% endif %}
                     {% else %}
                         <td>
-                            <form action="{{ url_for('book_appointment_page', patron=patron.name, stylist=stylist.name) }}" method="get">
+                            <form action="{{ url_for('book_appointment_page', patron=patron.name, stylist=stylist.name, day=day, time=time) }}" method="get">
                                     <input style="background-color:burlywood" type="submit" value="X"/>
                             </form>  
                         </td>

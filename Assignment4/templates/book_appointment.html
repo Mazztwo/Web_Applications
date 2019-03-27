@@ -1,6 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    Patron: {{ patron }}
-    Stylist: {{ stylist }}
+
+<style>
+        table {
+        border-collapse: collapse;
+        width: 30%;
+        }
+        
+        td, th {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 5px;
+        }
+        
+</style>
+
+<h1>Appointment Booking Page:</h1>
+
+<table>
+    <tr><th>Your Name</th><td>{{ patron }}</td> </tr>
+    <tr><th>Stylist Name</th><td>{{ stylist }}</td></tr>
+    <tr><th>Day & Time Of Appointment</th><td>{{ day }}, {{time}}</td></tr>
+</table>
+<br>
+<br>
+<form action="{{ url_for('login_page') }}" method="get">
+        <input type="submit" value="Confirm Appointment"/>
+</form>
+<br>
+<form action="{{ url_for('login_page') }}" method="get">
+        <input type="submit" value="Cancel"/>
+</form>
+
 {% endblock %}
