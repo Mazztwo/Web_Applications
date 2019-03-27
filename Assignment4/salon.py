@@ -147,6 +147,11 @@ def create_stylist_page():
 def user_not_found_page():
     return render_template("wrong_info.html")
 
+# Renders book appointment page
+@app.route("/book-appointment-page/<patron>-<stylist>", methods=["GET"])
+def book_appointment_page(patron, stylist):
+    # Send to appointment booking page
+    return render_template("book_appointment.html", patron=patron, stylist=stylist)
 
 # Renders a logged in patron's page
 @app.route("/patron-logged-in-page/<patron>")

@@ -20,7 +20,7 @@
             }
     </style>
 
-    <u>Appointments (X = No Appointment):</u>
+    <u>Appointments (X = No Appointment. Click an X to schedule an appointment!):</u>
     <br>
     <br>   
     <table>
@@ -54,10 +54,18 @@
                             {% endif %}
                         {% endfor %}
                         {% if ns.apt %}
-                            <td>X</td>
+                            <td>
+                                <form action="{{ url_for('book_appointment_page', patron=patron.name, stylist=stylist.name) }}" method="get">
+                                        <input style="background-color:burlywood" type="submit" value="X"/>
+                                </form>  
+                            </td>
                         {% endif %}
-                    {% else %}  
-                        <td>X</td>
+                    {% else %}
+                        <td>
+                            <form action="{{ url_for('book_appointment_page', patron=patron.name, stylist=stylist.name) }}" method="get">
+                                    <input style="background-color:burlywood" type="submit" value="X"/>
+                            </form>  
+                        </td>
                     {% endif%}
                 {% endfor %}
             </tr>
