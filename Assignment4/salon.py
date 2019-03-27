@@ -73,7 +73,7 @@ def get_user_page():
             # Check if stylist password is correct
             if(temp_user.password == pw):
                 # Take user to their profile
-                return redirect(url_for("stylist_page", stylist=temp_user.name))
+                return redirect(url_for("stylist_page", stylist=temp_user.name, owner="no"))
         
         # Check if username is in patron table
         temp_user = Patron.query.filter_by(username=un).first()
@@ -91,10 +91,10 @@ def owner_page():
     return render_template("owner.html", stylists=Stylist.query.all(), patrons=Patron.query.all())
 
 # Renders stylist page
-@app.route("/stylist-page/<stylist>")
-def stylist_page(stylist):
+@app.route("/stylist-page/<stylist>-<owner>")
+def stylist_page(stylist, owner):
     styl = Stylist.query.filter_by(name=stylist).first()
-    return render_template("stylist.html", stylist=styl)
+    return render_template("stylist.html", stylist=styl, owner=owner)
 
 # Renders patron page
 @app.route("/patron-page/<patron>")

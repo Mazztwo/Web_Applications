@@ -21,7 +21,7 @@
     <h3><u>Stylists (click stylist/patron name to view their profile):</u></h3>        
     {% if stylists %}
         {% for stylist in stylists %}
-            <form action="{{ url_for('stylist_page', stylist=stylist.name) }}" method="get">
+            <form action="{{ url_for('stylist_page', stylist=stylist.name, owner='yes') }}" method="get">
                 <input style="background-color:aquamarine" type="submit" value="{{stylist.name}}"/>
                 Appointments: <br><br>
             </form>

@@ -74,6 +74,12 @@
 
     <br>
     <br>
+    <div>
+        <form action="{{ url_for('patron_logged_in_page', patron=patron.name) }}" method="get">
+            <input type="submit" value="Back"/>
+        </form>
+    </div>
+    <br>
     <form action="{{ url_for('login_page') }}" method="get">
         <input type="submit" value="Log Out"/>
     </form>

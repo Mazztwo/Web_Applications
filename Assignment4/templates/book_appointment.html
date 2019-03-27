@@ -29,7 +29,7 @@
         <input type="submit" value="Confirm Appointment"/>
 </form>
 <br>
-<form action="{{ url_for('login_page') }}" method="get">
+<form action="{{ url_for('stylist_logged_in_page', patron=patron, stylist=stylist) }}" method="get">
         <input type="submit" value="Cancel"/>
 </form>
 
