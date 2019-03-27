@@ -186,6 +186,18 @@ def confirm_appointment(stylist, patron, day, time):
     # Send to appointment confirmed page
     return render_template("appointment_confirmed.html", patron=patron, stylist=stylist, day=day, time=time)
 
+# Cancels an appointment and renders appointment canceled page
+@app.route("/cancel-appointment-page/<patron>-<stylist>-<day>-<time>")
+def cancel_appointment(patron, stylist, day, time):
+    # Remove appointment from stylist and patrons
+    pat = Patron.query.filter_by(name=patron).first()
+    stat = Stylist.query.filter_by(name=stylist).first()
+    Appointment.query.filter_by(day=day, time=time, stylist_id=stat.id, patron_id=pat.id).delete()
+    db.session.commit()
+
+    # Send to appointment canceled appointment page
+    return render_template("cancel_appointment.html", patron=patron, stylist=stylist, day=day, time=time)
+
 
 @app.cli.command("initdb")
 def initdb():

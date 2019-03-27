@@ -6,7 +6,7 @@
 <style>
         table {
           border-collapse: collapse;
-          width: 20%;
+          width: 30%;
         }
         
         td, th {
@@ -21,7 +21,7 @@
 </style>
 
 <div>
-    <u>Available Stylists (click stylist name to view their profile):</u>  
+    <h3><u>Available Stylists (click stylist name to view their profile):</u></h3>
     {% if stylists %}
         <ul>
         {% for stylist in stylists %}
@@ -38,8 +38,7 @@
 </div>
 <br>
 <br>
-<u>Your Scheduled Appointments:</u>
-<br>
+<h3><u>Your Scheduled Appointments:</u></h3>
 <br>
 <table>
 {% if patron.appointments%}
@@ -49,6 +48,11 @@
         <tr>
             <td>{{ appointment.stylist.name }}</td>
             <td>{{ appointment.day }}, {{ appointment.time }}</td>
+            <td>
+                <form action="{{ url_for('cancel_appointment', patron=patron.name, stylist=appointment.stylist.name, day=appointment.day, time=appointment.time)}}">
+                    <input type="submit" value="Cancel"/>
+                </form>
+            </td>
         </tr>
     {% endfor %}
 {% else %}

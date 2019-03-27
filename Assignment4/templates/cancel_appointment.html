@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+        table {
+        border-collapse: collapse;
+        width: 30%;
+        }
+        
+        td, th {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 5px;
+        }
+        
+</style>
+
+<h1>Your Appointment Has Been Canceled!</h1>
+<h4>See canceled appointment below:</h4>
+
+<table>
+    <tr><th>Your Name</th><td>{{ patron }}</td> </tr>
+    <tr><th>Stylist Name</th><td>{{ stylist }}</td></tr>
+    <tr><th>Day & Time Of Appointment</th><td>{{ day }}, {{ time }}</td></tr>
+</table>
+<br>
+
+<div>
+    <form action="{{ url_for('patron_logged_in_page', patron=patron) }}" method="get">
+        <input type="submit" value="Back to Profile"/>
+    </form>
+</div>
+
+{% endblock %}
