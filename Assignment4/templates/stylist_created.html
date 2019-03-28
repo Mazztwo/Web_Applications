@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Stylist Account Created!</h1>
+
+<br>
+<form action="{{ url_for('owner_page') }}" method="get">
+    <input type="submit" value="Back to Owner Page"/>
+</form>
+
+{% endblock %}

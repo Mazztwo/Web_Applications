@@ -21,11 +21,11 @@
     <h3><u>Stylists (click stylist/patron name to view their profile):</u></h3>        
     {% if stylists %}
         {% for stylist in stylists %}
+        <table>
             <form action="{{ url_for('stylist_page', stylist=stylist.name, owner='yes') }}" method="get">
                 <input style="background-color:aquamarine" type="submit" value="{{stylist.name}}"/>
                 Appointments: <br><br>
             </form>
-            <table>
             {% if stylist.appointments%}
             <th>Patron Name</th>
             <th>Date & Time</th>
@@ -44,13 +44,15 @@
             {% else %}
                 <tr><td>This stylist has no appointments scheduled.</td></tr>
             {% endif %}
-            </table>
-            <br>
-            <br>
+        </table>
+        <br>
         {% endfor %}
+    {% else %}
+        <table><tr><td>There are no stylists in the system!</td></tr></table>
     {% endif %}
 </div>
-
+<br>
+            <br>
 <h3><u>List Of All Patrons In System (click patron name to view their profile):</u></h3>
 <table>
     {% if patrons %}   

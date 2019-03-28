@@ -43,23 +43,11 @@ class Appointment(db.Model):
 # Default page. Renders login page
 @app.route("/")
 def login_page():
-    """
-    names = Name.query.all()
-    return render_template("home.html", message="Hello World!", names=names)
-    """
     return render_template("login.html")
 
 # Handles login of users.
 @app.route("/user-page/", methods=["POST"])
 def get_user_page():
-
-    '''
-    name = Name(request.form.get("name"))
-    db.session.add(name)
-    db.session.commit()
-    return redirect(url_for("hello"))
-    return render_template("home.html", message="Hello World!", names=names)
-    '''
     # Get input from http request
     un = request.form.get("username")
     pw = request.form.get("password")
@@ -124,8 +112,8 @@ def create_patron_page():
     db.session.add(new_patron)
     db.session.commit()
 
-    # Send back to login page
-    return redirect(url_for("login_page"))
+    # Send back to confirmation page
+    return render_template("patron_created.html")
 
 # Creates new stylist account
 @app.route("/create-stylist-account", methods=["POST"])
@@ -139,8 +127,8 @@ def create_stylist_page():
     db.session.add(new_stylist)
     db.session.commit()
 
-    # Send back to owner page
-    return redirect(url_for("owner_page"))
+    # Send back to confirmation page
+    return render_template("stylist_created.html")
 
 # Renders user not found page
 @app.route("/user-not-found/", methods=["GET"])
@@ -170,7 +158,6 @@ def stylist_logged_in_page(patron, stylist):
 # Creates new appointment
 @app.route("/confirm-appointment-<stylist>-<patron>-<day>-<time>")
 def confirm_appointment(stylist, patron, day, time):
-
     # Create new appointment and add to database
     new_appointment = Appointment(day=day, time=time)
     db.session.add(new_appointment)
@@ -197,7 +184,6 @@ def cancel_appointment(patron, stylist, day, time):
 
     # Send to appointment canceled appointment page
     return render_template("cancel_appointment.html", patron=patron, stylist=stylist, day=day, time=time)
-
 
 @app.cli.command("initdb")
 def initdb():

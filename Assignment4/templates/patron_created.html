@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Patron Account Created!</h1>
+
+<br>
+<form action="{{ url_for('login_page') }}" method="get">
+    <input type="submit" value="Go Back To Login Page"/>
+</form>
+
+{% endblock %}
