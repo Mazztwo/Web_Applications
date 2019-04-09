@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Account Creation Page</h1>
+
+<div>
+    <form action="{{ url_for('create_account') }}" method="post">
+        <input type="text" name="username" value="enter username"/><br>
+        <input text="type" name="birthday" value="enter birthday"/>
+        <br>
+        <br>
+        <input type="submit" value="Create Account"/>
+    </form>
+</div>
+<br>
+<form action="{{ url_for('home') }}">
+    <input type="submit" value="Go Back To Landing Page"/>
+</form>
+
+{% endblock %}

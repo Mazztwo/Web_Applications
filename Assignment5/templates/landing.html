@@ -17,5 +17,13 @@
 <p>Currently, there are no games available to play.</p>
 {% endif %}
 
+<br>
+<br>
+<div>
+    <h2>Create New Account Below:</h2>
+    <form action="{{ url_for('account_creation_page') }}">
+        <input type="submit" value="Create New Account"/>
+    </form>
+</div>
 
 {% endblock %}

@@ -18,6 +18,13 @@ def home():
     games = db.session.query(Game).all()
     return render_template("landing.html", games=games)
 
+@app.route("/account-creation-page/")
+def account_creation_page():
+    return render_template("account_creation.html")
+
+@app.route("/create-acc/")
+def create_account():
+    return render_template("account_creation.html")
 
 @app.route("/game/<game_id>/")
 def game(game_id=None):
