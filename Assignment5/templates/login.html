@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <h1>Existing Users Log In Below:</h1>  
+    <form action="{{ url_for('landing_page') }}" >
+        <input type="text" name="username" value="enter username"/><br>
+        <input text="type" name="password" value="enter password"/><br>
+        <input type="submit" value="Log In"/>
+    </form>
+</div>
+<br>
+<br>
+<div>
+    <h1>Create New Account Below:</h1>
+    <form action="{{ url_for('account_creation_page') }}">
+        <input type="submit" value="Create New Account"/>
+    </form>
+</div>
+
+{% endblock %}

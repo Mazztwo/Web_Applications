@@ -1,4 +1,4 @@
-from flask import Flask, request, session, render_template, abort
+from flask import Flask, request, session, render_template, abort, redirect, url_for
 from models import db, Player, Game
 import datetime
 import os
@@ -13,8 +13,13 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
 
+
 @app.route("/")
-def home():
+def login_page():
+    return render_template("login.html")
+
+@app.route("/landing/")
+def landing_page():
     games = db.session.query(Game).all()
     return render_template("landing.html", games=games)
 
@@ -22,9 +27,19 @@ def home():
 def account_creation_page():
     return render_template("account_creation.html")
 
-@app.route("/create-acc/")
-def create_account():
-    return render_template("account_creation.html")
+@app.route("/create-acc/", methods=['POST'])
+def create_account_logic():
+
+    # Create new user and place into database
+    new_user = Player(
+        username=request.form["username"], 
+        birthday=datetime.datetime.strptime(request.form["birthday"].replace("-","/"), '%Y/%m/%d').date()
+    )
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return redirect(url_for("login_page"))
 
 @app.route("/game/<game_id>/")
 def game(game_id=None):
@@ -34,8 +49,6 @@ def game(game_id=None):
 
     return abort(404)
 
-
-
 # CLI Commands
 @app.cli.command("initdb")
 def init_db():
@@ -44,7 +57,6 @@ def init_db():
     db.create_all()
 
     print("Initialized Connect 4 Database.")
-
 
 @app.cli.command("devinit")
 def init_dev_data():
@@ -69,7 +81,6 @@ def init_dev_data():
 
     db.session.commit()
     print("Added dummy data.")
-
 
 if __name__ == "__main__":
     app.run(threaded=True)
