@@ -18,9 +18,10 @@ db.init_app(app)
 def login_page():
     return render_template("login.html")
 
-@app.route("/landing/")
-def landing_page():
+@app.route("/landing/<id>")
+def landing_page(id):
     games = db.session.query(Game).all()
+
     return render_template("landing.html", games=games)
 
 @app.route("/account-creation-page/")
@@ -33,13 +34,35 @@ def create_account_logic():
     # Create new user and place into database
     new_user = Player(
         username=request.form["username"], 
-        birthday=datetime.datetime.strptime(request.form["birthday"].replace("-","/"), '%Y/%m/%d').date()
+        birthday=datetime.datetime.strptime(request.form["birthday"].replace("-","/"), '%Y/%m/%d').date(),
+        password=request.form["password"]
     )
 
     db.session.add(new_user)
     db.session.commit()
 
     return redirect(url_for("login_page"))
+
+@app.route("/login-logic/", methods=['POST'])
+def landing_page_logic():
+
+    # Verify username and password
+    temp_user = Player.query.filter_by(username=request.form["username"]).first()
+
+    # Check if username is in player table
+    if(temp_user):
+        # Check if user password is correct
+        if(temp_user.password == request.form["password"]):
+            # Take user to their landing page
+            return redirect(url_for("landing_page", id=temp_user.id))
+    
+    # User not found/incorrect password
+    return redirect(url_for("user_not_found_page"))
+
+# Renders user not found page
+@app.route("/user-not-found/")
+def user_not_found_page():
+    return render_template("wrong_info.html")
 
 @app.route("/game/<game_id>/")
 def game(game_id=None):
@@ -68,8 +91,8 @@ def init_dev_data():
     g = Game()
     db.session.add(g)
 
-    p1 = Player(username="tow", birthday=datetime.datetime.strptime('11/06/1991', '%m/%d/%Y').date())
-    p2 = Player(username="twaits", birthday=datetime.datetime.strptime('01/14/1987', '%m/%d/%Y').date())
+    p1 = Player(username="p1", birthday=datetime.datetime.strptime('11/06/1991', '%m/%d/%Y').date(), password="p1")
+    p2 = Player(username="p2", birthday=datetime.datetime.strptime('01/14/1987', '%m/%d/%Y').date(), password="p2")
 
     db.session.add(p1)
     print("Created %s" % p1.username)

@@ -7,6 +7,7 @@ class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
     birthday = db.Column(db.Date, nullable=False)
+    password = db.Column(db.String(20))
 
     def birthday_format(self, format=None):
         if not format:

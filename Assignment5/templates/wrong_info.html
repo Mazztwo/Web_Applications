@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div>
+    <h2>The username does not exist or password is incorrect.</h2>
+    <form action="{{ url_for('login_page') }}">
+        <input type="submit" value="Go Back To Login Page"/>
+    </form>
+</div>
+
+
+{% endblock %}

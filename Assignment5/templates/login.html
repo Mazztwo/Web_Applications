@@ -3,7 +3,7 @@
 {% block content %}
 <div>
     <h1>Existing Users Log In Below:</h1>  
-    <form action="{{ url_for('landing_page') }}" >
+    <form action="{{ url_for('landing_page_logic') }}" method="post">
         <input type="text" name="username" value="enter username"/><br>
         <input text="type" name="password" value="enter password"/><br>
         <input type="submit" value="Log In"/>
