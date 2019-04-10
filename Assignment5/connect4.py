@@ -20,8 +20,10 @@ def login_page():
 
 @app.route("/landing/<id>")
 def landing_page(id):
-    games = db.session.query(Game).all()
-
+    games = Game.query.filter(db.or_(
+        Game.player_one_id== int(id), 
+        Game.player_two_id==int(id)
+        )).all()
     return render_template("landing.html", games=games)
 
 @app.route("/account-creation-page/")

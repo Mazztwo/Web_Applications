@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_
 import datetime
 
 db = SQLAlchemy()
