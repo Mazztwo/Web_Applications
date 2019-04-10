@@ -9,10 +9,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
 )
 # Suppress deprecation warning
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
 db.init_app(app)
-
-
 
 @app.route("/")
 def login_page():
@@ -21,10 +18,10 @@ def login_page():
 @app.route("/landing/<id>")
 def landing_page(id):
     games = Game.query.filter(db.or_(
-        Game.player_one_id== int(id), 
+        Game.player_one_id==int(id), 
         Game.player_two_id==int(id)
         )).all()
-    return render_template("landing.html", games=games)
+    return render_template("landing.html", games=games, curr_user=int(id))
 
 @app.route("/account-creation-page/")
 def account_creation_page():
@@ -103,9 +100,10 @@ def init_dev_data():
 
     g.player_one = p1
     g.player_two = p2
+    g.created_by = p1
 
     db.session.commit()
-    print("Added dummy data.")
+    print("Added dummy data.") 
 
 if __name__ == "__main__":
     app.run(threaded=True)

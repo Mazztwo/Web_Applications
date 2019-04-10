@@ -8,11 +8,20 @@
 
 <h1>Games</h1>
 {% if games %}
-<ul>
+<table>
     {% for game in games %}
-    <li><a href="{{ url_for('game', game_id = game.id)}}">{{ game.game_title() }}</a></li>
+    <tr>
+        <td>
+            <a href="{{ url_for('game', game_id = game.id)}}">{{ game.game_title() }}</a>
+        <td>
+        <td>
+            {% if game.created_by_id==curr_user%}
+                ---  <a href="">Delete Game</a>
+            {% endif %}
+        </td>
+    </tr>
     {% endfor %}
-</ul>
+</table>
 {% else %}
 <p>Currently, there are no games available to play.</p>
 {% endif %}
