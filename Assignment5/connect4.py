@@ -71,6 +71,14 @@ def game(game_id=None):
 
     return abort(404)
 
+@app.route("/delete-logic/<game_id>/")
+def delete_logic(game_id):
+    # Delete game and re-render landing page
+    user_id = Game.query.filter_by(id=int(game_id)).first().created_by_id
+    Game.query.filter_by(id=int(game_id)).delete()
+    db.session.commit()
+    return redirect(url_for("landing_page", id=user_id))
+
 # CLI Commands
 @app.cli.command("initdb")
 def init_db():
@@ -87,20 +95,32 @@ def init_dev_data():
     db.create_all()
     print("Initialized Connect 4 Database.")
 
-    g = Game()
-    db.session.add(g)
+    g1 = Game()
+    g2 = Game()
+    g3 = Game()
+    db.session.add(g1)
+    db.session.add(g2)
+    db.session.add(g3)
 
     p1 = Player(username="p1", birthday=datetime.datetime.strptime('11/06/1991', '%m/%d/%Y').date(), password="p1")
     p2 = Player(username="p2", birthday=datetime.datetime.strptime('01/14/1987', '%m/%d/%Y').date(), password="p2")
+    p3 = Player(username="p3", birthday=datetime.datetime.strptime('06/03/1993', '%m/%d/%Y').date(), password="p3")
 
     db.session.add(p1)
-    print("Created %s" % p1.username)
     db.session.add(p2)
-    print("Created %s" % p2.username)
+    db.session.add(p3)
 
-    g.player_one = p1
-    g.player_two = p2
-    g.created_by = p1
+    g1.player_one = p1
+    g1.player_two = p2
+    g1.created_by = p1
+
+    g2.player_one = p1
+    g2.player_two = p3
+    g2.created_by = p1
+
+    g3.player_one = p2
+    g3.player_two = p3
+    g3.created_by = p2
 
     db.session.commit()
     print("Added dummy data.") 
