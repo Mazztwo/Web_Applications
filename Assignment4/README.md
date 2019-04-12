@@ -1,12 +1,11 @@
-# Treat Yo Self -- <Replace with your name>
+# Assignment 4 - Treat Yo Self 
 
-Name: <Full Name>
-Pitt ID: <ID>
+Name: Alessio Mazzone
+Pitt ID: ALM388
 
 ## Installation
-
-1. Instructions to get your code up and running.
+1. Set the FLASK_APP environment variable to 'salon.py' 
+2. Initialize the database by running 'flask initdb'
 
 ## Running the App
-
-1. Instructions to run your application.
+1. Run 'flask run' to start application.

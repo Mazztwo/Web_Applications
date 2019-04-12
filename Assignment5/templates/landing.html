@@ -25,6 +25,22 @@
 {% else %}
 <p>Currently, there are no games available to play.</p>
 {% endif %}
+<div>   
+    <h2>Your Top 10 Scores:</h2>
+    <table>
+        {% for row in range(10) %}
+            <tr>
+                <td>    
+                   
+                </td>
+                <td>
+                    <a href="">Link to Game</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
 
 <br>
 <br>

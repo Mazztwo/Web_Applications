@@ -43,7 +43,6 @@ class Movie(Media):
    
    #
 
-
 # Define a decorator to use on slugs(), abbr(), and before_year():
 # Decorator should take an argument of msg
 # Prints "=====\n%s\n=====" % msg

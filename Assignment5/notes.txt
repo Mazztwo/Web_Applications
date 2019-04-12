@@ -1,0 +1,12 @@
+To run:
+export FLASK_APP='connect4.py' 
+flask initdb 
+export FLASK_DEBUG=1; 
+flask run
+
+
+For development:
+export FLASK_APP='connect4.py' 
+flask devinit 
+export FLASK_DEBUG=1; 
+flask run
