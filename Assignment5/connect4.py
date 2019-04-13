@@ -2,6 +2,7 @@ from flask import Flask, request, session, render_template, abort, redirect, url
 from models import db, Player, Game
 import datetime
 import os
+import json
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
@@ -63,7 +64,7 @@ def landing_page_logic():
 def user_not_found_page():
     return render_template("wrong_info.html")
 
-@app.route("/game/<game_id>/")
+@app.route("/game/<game_id>/", methods=['GET'])
 def game(game_id=None):
     if game_id:
         game = db.session.query(Game).get(game_id)
@@ -73,18 +74,13 @@ def game(game_id=None):
 
 @app.route("/new_token", methods=["POST"])
 def add():
-
-    # Add turn, game_over, winner_id to table from the request
-    # Guess I also need to persist the game itself...Do JSON stuff..
-
-	# items.append([request.form["one"], request.form["two"], request.form["three"]])
-
-    json_game = request.form["game"]
+    # Get game from request
+    json_game = json.loads(request.form["game"])
     print(json_game)
-
-    return "OK!"
-
-
+    # Update game in db
+    #curr_game = Game.query.filter_by(id=json_game['gameId']).first()
+    #curr_game.persisted = json_game
+    #db.session.commit()
 
 @app.route("/delete-logic/<game_id>/")
 def delete_logic(game_id):
@@ -93,6 +89,13 @@ def delete_logic(game_id):
     Game.query.filter_by(id=int(game_id)).delete()
     db.session.commit()
     return redirect(url_for("landing_page", id=user_id))
+
+@app.route("/poll", methods=["POST"])
+def poll():
+    json_game = json.loads(request.form["game"])
+    print(json_game)
+    return "polled"
+
 
 # CLI Commands
 @app.cli.command("initdb")
