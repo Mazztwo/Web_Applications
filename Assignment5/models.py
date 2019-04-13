@@ -30,7 +30,7 @@ class Game(db.Model):
     game_over = db.Column(db.Boolean, nullable=False, default=False)
     winner_id = db.Column(db.Integer, db.ForeignKey('player.id'))
     created_by_id = db.Column(db.Integer, db.ForeignKey('player.id'))
-    #persisted = db.Column(db.String(2000))
+    persisted = db.Column(db.String, nullable=False, default="")
 
     player_one = db.relationship('Player', foreign_keys=[player_one_id], backref='games_player_one')
     player_two = db.relationship('Player', foreign_keys=[player_two_id], backref='games_player_two')

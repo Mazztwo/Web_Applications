@@ -77,10 +77,16 @@ def add():
     # Get game from request
     json_game = json.loads(request.form["game"])
     print(json_game)
+
     # Update game in db
-    #curr_game = Game.query.filter_by(id=json_game['gameId']).first()
-    #curr_game.persisted = json_game
-    #db.session.commit()
+    curr_game = Game.query.filter_by(id=json_game['gameId']).first()
+    curr_game.persisted = request.form["game"]
+
+    # ALSO UPDATE TURN, WINNER, ETC....
+
+    db.session.commit()
+    print("UPDATED DB")
+    return "token updated"
 
 @app.route("/delete-logic/<game_id>/")
 def delete_logic(game_id):
@@ -92,8 +98,13 @@ def delete_logic(game_id):
 
 @app.route("/poll", methods=["POST"])
 def poll():
+    # Get game from request
     json_game = json.loads(request.form["game"])
-    print(json_game)
+    # Update game in db
+    curr_game = Game.query.filter_by(id=json_game['gameId']).first()
+    curr_game.persisted = request.form["game"]
+    db.session.commit()
+    print("polled")
     return "polled"
 
 
