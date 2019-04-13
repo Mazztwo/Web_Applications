@@ -10,3 +10,11 @@ export FLASK_APP='connect4.py'
 flask devinit 
 export FLASK_DEBUG=1; 
 flask run
+
+
+Notes:
+- In LocalStorage, game properties I need:
+    -game.gameOver, game.turn, game.p1/p2.winner
+    -other: game.gameId, game.p1/p2.id
+- Properties in Game db that need persisted
+    - turn, game_over, winner_id

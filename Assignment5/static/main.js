@@ -1,3 +1,6 @@
+var timeoutID;
+var timeout = 45000;
+
 function Player(name, birthday, id, tokenBool) {
     this.name = name;
     this.id = id ? id : -1;
@@ -39,7 +42,31 @@ function Connect4(p1, p2, gameId) {
     }
 
     this.cacheGame = function() {
-        localStorage.setItem('game_' + this.gameId, JSON.stringify(this));
+
+        var curr_game = JSON.stringify(this);
+
+        localStorage.setItem('game_' + this.gameId, curr_game );
+
+        var httpRequest = new XMLHttpRequest();
+            
+        // Get data you want to send to server..
+        //var one = document.getElementById("a").value
+        //var two = document.getElementById("b").value
+        //var three = document.getElementById("c").value
+        // var row = [one, two, three]
+
+        // httpRequest.onreadystatechange = function() { handlePost(httpRequest, row) };
+        httpRequest.onreadystatechange = function(){};
+
+        httpRequest.open("POST", "/new_token");
+        httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        // var data;
+        // data = "one=" + one + "&two=" + two + "&three=" + three;
+        //httpRequest.send(data);
+        httpRequest.send("game=" + curr_game);
+        ///////////////////////////////////////
+
     }
 
     this.restoreGame = function() {
@@ -48,6 +75,7 @@ function Connect4(p1, p2, gameId) {
 
     var handleColumnClick = function(self) {
         return function(e) {
+
             var el = e.currentTarget;
             var p = self.currentPlayer();
 
@@ -294,7 +322,14 @@ function Connect4(p1, p2, gameId) {
                 if (!this.gameOver) {
                     tdEl.addEventListener('mouseenter', toggleCellHover);
                     tdEl.addEventListener('mouseleave', toggleCellHover);
-                    tdEl.addEventListener('click', handleColumnClick);
+
+
+
+                    tdEl.addEventListener('click', handleColumnClick, true);
+
+
+
+
                 }
                 trEl.append(tdEl);
             }
@@ -322,3 +357,88 @@ function Connect4(p1, p2, gameId) {
         }
     }(this));
 }
+
+/////////////////////////////////////////////////////
+///////////// polling example code here ////////////
+/*
+function setup() {
+	document.getElementById("theButton").addEventListener("click", makePost, true);
+
+	timeoutID = window.setTimeout(poller, timeout);
+}*/
+
+function makePost() {
+	var httpRequest = new XMLHttpRequest();
+
+	if (!httpRequest) {
+		('Giving up :( Cannot create an XMLHTTP instance');
+		return false;
+	}
+
+	var one = document.getElementById("a").value
+	var two = document.getElementById("b").value
+	var three = document.getElementById("c").value
+	var row = [one, two, three]
+	httpRequest.onreadystatechange = function() { handlePost(httpRequest, row) };
+	
+	httpRequest.open("POST", "/new_item");
+	httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+	var data;
+	data = "one=" + one + "&two=" + two + "&three=" + three;
+	
+	httpRequest.send(data);
+}
+
+function handlePost(httpRequest, row) {
+    
+    /* Don't really need this to do anything....
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+		if (httpRequest.status === 200) {
+			addRow(row);
+			clearInput();
+		} else {
+			alert("There was a problem with the post request.");
+		}
+    }
+    */
+    
+}
+
+function poller() {
+	var httpRequest = new XMLHttpRequest();
+
+	if (!httpRequest) {
+		alert('Giving up :( Cannot create an XMLHTTP instance');
+		return false;
+	}
+
+	httpRequest.onreadystatechange = function() { handlePoll(httpRequest) };
+	httpRequest.open("GET", "/items");
+	httpRequest.send();
+}
+
+function handlePoll(httpRequest) {
+	if (httpRequest.readyState === XMLHttpRequest.DONE) {
+		if (httpRequest.status === 200) {
+			var tab = document.getElementById("theTable");
+			while (tab.rows.length > 0) {
+				tab.deleteRow(0);
+			}
+			
+			var rows = JSON.parse(httpRequest.responseText);
+			for (var i = 0; i < rows.length; i++) {
+				addRow(rows[i]);
+			}
+			
+			timeoutID = window.setTimeout(poller, timeout);
+			
+		} else {
+			alert("There was a problem with the poll request.  you'll need to refresh the page to recieve updates again!");
+		}
+	}
+}
+
+// window.addEventListener("load", setup, true);
+/////////////////////////////////////////////////////
+

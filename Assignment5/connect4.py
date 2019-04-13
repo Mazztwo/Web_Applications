@@ -71,6 +71,21 @@ def game(game_id=None):
 
     return abort(404)
 
+@app.route("/new_token", methods=["POST"])
+def add():
+
+    # Add turn, game_over, winner_id to table from the request
+    # Guess I also need to persist the game itself...Do JSON stuff..
+
+	# items.append([request.form["one"], request.form["two"], request.form["three"]])
+
+    json_game = request.form["game"]
+    print(json_game)
+
+    return "OK!"
+
+
+
 @app.route("/delete-logic/<game_id>/")
 def delete_logic(game_id):
     # Delete game and re-render landing page
