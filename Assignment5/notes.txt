@@ -20,4 +20,7 @@ Notes:
     - turn, game_over, winner_id
 
 
-JSON rep of game:
+current:
+-inside function handlePoll(httpRequest) , need board to redraw after every poll
+-this is based on the def poll(): and what it returns. does it return whats in the db or whats in local LocalStorage   
+    -what are we restoring from, db or local storage

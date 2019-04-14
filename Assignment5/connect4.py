@@ -72,6 +72,15 @@ def game(game_id=None):
 
     return abort(404)
 
+@app.route("/delete-logic/<game_id>/")
+def delete_logic(game_id):
+    # Delete game and re-render landing page
+    user_id = Game.query.filter_by(id=int(game_id)).first().created_by_id
+    Game.query.filter_by(id=int(game_id)).delete()
+
+    db.session.commit()
+    return redirect(url_for("landing_page", id=user_id))
+
 @app.route("/new_token", methods=["POST"])
 def add():
     # Get game from request
@@ -88,25 +97,19 @@ def add():
     print("UPDATED DB")
     return "token updated"
 
-@app.route("/delete-logic/<game_id>/")
-def delete_logic(game_id):
-    # Delete game and re-render landing page
-    user_id = Game.query.filter_by(id=int(game_id)).first().created_by_id
-    Game.query.filter_by(id=int(game_id)).delete()
-    db.session.commit()
-    return redirect(url_for("landing_page", id=user_id))
-
 @app.route("/poll", methods=["POST"])
 def poll():
+
+        # ALSO UPDATE TURN, WINNER, ETC....
+
     # Get game from request
     json_game = json.loads(request.form["game"])
     # Update game in db
     curr_game = Game.query.filter_by(id=json_game['gameId']).first()
     curr_game.persisted = request.form["game"]
     db.session.commit()
-    print("polled")
-    return "polled"
-
+    
+    return json.dumps(request.form["game"])
 
 # CLI Commands
 @app.cli.command("initdb")
