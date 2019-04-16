@@ -22,7 +22,7 @@ def landing_page(id):
         Game.player_one_id==int(id), 
         Game.player_two_id==int(id)
         )).all()
-    return render_template("landing.html", games=games, curr_user=int(id))
+    return render_template("landing.html", games=games, curr_user=Player.query.filter_by(id=int(id)).first())
 
 @app.route("/account-creation-page/")
 def account_creation_page():
@@ -64,11 +64,11 @@ def landing_page_logic():
 def user_not_found_page():
     return render_template("wrong_info.html")
 
-@app.route("/game/<game_id>/", methods=['GET'])
-def game(game_id=None):
+@app.route("/game/<curr_user>/<game_id>/", methods=['GET'])
+def game(game_id=None, curr_user=None):
     if game_id:
         game = db.session.query(Game).get(game_id)
-        return render_template("game.html", game=game)
+        return render_template("game.html", game=game, curr_user=curr_user)
 
     return abort(404)
 
@@ -226,7 +226,7 @@ def init_dev_data():
                 "isRedToken": false, 
                 "tokensRemaining": 21, 
                 "remainingToWin": 4, 
-                "winner": False
+                "winner": false
                 }, 
             "p2": 
                 {"name": \""""+p3.username+"""\", 
@@ -235,7 +235,7 @@ def init_dev_data():
                 "isRedToken": true, 
                 "tokensRemaining": 21, 
                 "remainingToWin": 4, 
-                "winner": False
+                "winner": false
                 }, 
             "turn": 1, 
             "tokenState": [

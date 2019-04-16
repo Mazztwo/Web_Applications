@@ -1,5 +1,5 @@
 var timeoutID;
-var timeout = 600;
+var timeout = 500;
 
 function Player(name, birthday, id, tokenBool) {
     this.name = name;
