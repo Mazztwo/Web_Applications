@@ -316,8 +316,6 @@ function Connect4(p1, p2, gameId) {
                     tdEl.addEventListener('click', handleColumnClick, true);
 
 
-
-
                 }
                 trEl.append(tdEl);
             }
@@ -364,12 +362,20 @@ function Connect4(p1, p2, gameId) {
                         // Get http response
                         var board = JSON.parse(httpRequest.responseText);
 
+                        console.log(board);
+
                         self.gameOver = board.gameOver;
                         self.turn = board.turn;
                         self.tokenState = board.tokenState;
                         self.p1 = board.p1;
                         self.p2 = board.p2;
-                       
+
+                        // Re-render just board on all browsers
+                        var canvas = document.getElementById("gameboard")
+                        var board = document.getElementById("connect-table");
+                        canvas.removeChild(board);
+                        self.makeBoard();
+                
                         timeoutID = window.setTimeout(poller, timeout);	
                     } 
                 }
