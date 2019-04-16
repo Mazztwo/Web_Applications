@@ -11,7 +11,7 @@ class Player(db.Model):
 
     def birthday_format(self, format=None):
         if not format:
-            return datetime.date.strftime(self.birthday, '%B %d, %Y')
+            return datetime.date.strftime(self.birthday, '%B/%d/%Y')
         else:
             return datetime.date.strftime(self.birthday, format)
 

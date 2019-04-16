@@ -48,22 +48,10 @@ function Connect4(p1, p2, gameId) {
         localStorage.setItem('game_' + this.gameId, curr_game );
 
         var httpRequest = new XMLHttpRequest();
-            
-        // Get data you want to send to server..
-        //var one = document.getElementById("a").value
-        //var two = document.getElementById("b").value
-        //var three = document.getElementById("c").value
-        // var row = [one, two, three]
 
-        // httpRequest.onreadystatechange = function() { handlePost(httpRequest, row) };
         httpRequest.onreadystatechange = function(){};
-
         httpRequest.open("POST", "/new_token");
         httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-        // var data;
-        // data = "one=" + one + "&two=" + two + "&three=" + three;
-        //httpRequest.send(data);
         httpRequest.send("game=" + curr_game);
         ///////////////////////////////////////
 
@@ -362,9 +350,9 @@ function Connect4(p1, p2, gameId) {
         
                 httpRequest.onreadystatechange = function() { handlePoll(httpRequest) };
                 // Get game here and update
-                httpRequest.open("POST", "/poll");
+                httpRequest.open("POST", "/game_board");
                 httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                httpRequest.send("game=" + JSON.stringify(self));
+                httpRequest.send("game_id=" + self.gameId);
                 
             }
         
@@ -374,9 +362,7 @@ function Connect4(p1, p2, gameId) {
                     {			
                         // Redraw board
                         // Get http response
-                        var board = JSON.parse(JSON.parse(httpRequest.responseText));
-
-                        console.log(board);
+                        var board = JSON.parse(httpRequest.responseText);
 
                         self.gameOver = board.gameOver;
                         self.turn = board.turn;

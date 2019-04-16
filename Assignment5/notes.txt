@@ -7,7 +7,7 @@ flask run
 
 For development:
 export FLASK_APP='connect4.py' 
-flask devinit 
+flask rawr 
 export FLASK_DEBUG=1; 
 flask run
 
@@ -29,8 +29,8 @@ plan:
 To Do:
 X Get empty "game" from local storage and set that to persisted in db
 X when initiaizing db data, make sure to set persisted to the empty game
--make poll just pull data from request and redraw
--when user changes board, send data to db and upadate representation
+X make poll just pull data from request and redraw
+X when user changes board, send data to db and upadate representation
 
 
 

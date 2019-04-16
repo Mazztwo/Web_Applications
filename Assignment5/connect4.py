@@ -85,33 +85,32 @@ def delete_logic(game_id):
 def add():
     # Get game from request
     json_game = json.loads(request.form["game"])
-    print(json_game)
 
     # Update game in db
-    curr_game = Game.query.filter_by(id=json_game['gameId']).first()
+    curr_game = Game.query.filter_by(id=json_game["gameId"]).first()
     curr_game.persisted = request.form["game"]
+    curr_game.turn = json_game["turn"]
 
-    # ALSO UPDATE TURN, WINNER, ETC....
+    if (json_game["gameOver"] == True):
+        curr_game.game_over = 1
+
+        if (json_game["p1"]["winner"] == True):
+            curr_game.winner_id = curr_game.player_one_id
+        else:
+            curr_game.winner_id = curr_game.player_two_id
 
     db.session.commit()
+
     print("UPDATED DB")
     return "token updated"
 
-@app.route("/poll", methods=["POST"])
+@app.route("/game_board", methods=["POST"])
 def poll():
 
-        # ALSO UPDATE TURN, WINNER, ETC....
+    # Get current game in db and send to js
+    curr_game = Game.query.filter_by(id=request.form["game_id"]).first()
 
-    # Get game from request
-    json_game = json.loads(request.form["game"])
-    # Update game in db
-    curr_game = Game.query.filter_by(id=json_game['gameId']).first()
-    curr_game.persisted = request.form["game"]
-    db.session.commit()
-    
-    print (json_game)
-
-    return json.dumps(request.form["game"])
+    return curr_game.persisted
 
 # CLI Commands
 @app.cli.command("initdb")
@@ -122,7 +121,7 @@ def init_db():
 
     print("Initialized Connect 4 Database.")
 
-@app.cli.command("devinit")
+@app.cli.command("rawr")
 def init_dev_data():
     """Initializes database with data for development and testing"""
     db.drop_all()
@@ -148,70 +147,70 @@ def init_dev_data():
     g1.player_two = p2
     g1.created_by = p1
     g1.persisted = """{
-            'gameId': 1, 
-            'p1': 
-                {'name': """+p1.username+""", 
-                'id': 1, 
-                'birthday': """+p1.birthday_format()+""", 
-                'isRedToken': False, 
-                'tokensRemaining': 21, 
-                'remainingToWin': 4, 
-                'winner': False
+            "gameId": 1, 
+            "p1": 
+                {"name": \""""+p1.username+"""\", 
+                "id": 1, 
+                "birthday": \""""+p1.birthday_format()+"""\", 
+                "isRedToken": false, 
+                "tokensRemaining": 21, 
+                "remainingToWin": 4, 
+                "winner": false
                 }, 
-            'p2': 
-                {'name': """+p2.username+""", 
-                'id': 2, 
-                'birthday': """+p2.birthday_format()+""",
-                'isRedToken': True, 
-                'tokensRemaining': 21, 
-                'remainingToWin': 4, 
-                'winner': False
+            "p2": 
+                {"name": \""""+p2.username+"""\", 
+                "id": 2, 
+                "birthday": \""""+p2.birthday_format()+"""\",
+                "isRedToken": true, 
+                "tokensRemaining": 21, 
+                "remainingToWin": 4, 
+                "winner": false
                 }, 
-            'turn': 1, 
-            'tokenState': [
-                {'row': 0, 'col': 0}, {'row': 0, 'col': 1}, {'row': 0, 'col': 2}, {'row': 0, 'col': 3}, {'row': 0, 'col': 4}, {'row': 0, 'col': 5}, {'row': 0, 'col': 6}, 
-                {'row': 1, 'col': 0}, {'row': 1, 'col': 1}, {'row': 1, 'col': 2}, {'row': 1, 'col': 3}, {'row': 1, 'col': 4}, {'row': 1, 'col': 5}, {'row': 1, 'col': 6}, 
-                {'row': 2, 'col': 0}, {'row': 2, 'col': 1}, {'row': 2, 'col': 2}, {'row': 2, 'col': 3}, {'row': 2, 'col': 4}, {'row': 2, 'col': 5}, {'row': 2, 'col': 6}, 
-                {'row': 3, 'col': 0}, {'row': 3, 'col': 1}, {'row': 3, 'col': 2}, {'row': 3, 'col': 3}, {'row': 3, 'col': 4}, {'row': 3, 'col': 5}, {'row': 3, 'col': 6}, 
-                {'row': 4, 'col': 0}, {'row': 4, 'col': 1}, {'row': 4, 'col': 2}, {'row': 4, 'col': 3}, {'row': 4, 'col': 4}, {'row': 4, 'col': 5}, {'row': 4, 'col': 6}, 
-                {'row': 5, 'col': 0}, {'row': 5, 'col': 1}, {'row': 5, 'col': 2}, {'row': 5, 'col': 3}, {'row': 5, 'col': 4}, {'row': 5, 'col': 5}, {'row': 5, 'col': 6}
+            "turn": 1, 
+            "tokenState": [
+                {"row": 0, "col": 0}, {"row": 0, "col": 1}, {"row": 0, "col": 2}, {"row": 0, "col": 3}, {"row": 0, "col": 4}, {"row": 0, "col": 5}, {"row": 0, "col": 6}, 
+                {"row": 1, "col": 0}, {"row": 1, "col": 1}, {"row": 1, "col": 2}, {"row": 1, "col": 3}, {"row": 1, "col": 4}, {"row": 1, "col": 5}, {"row": 1, "col": 6}, 
+                {"row": 2, "col": 0}, {"row": 2, "col": 1}, {"row": 2, "col": 2}, {"row": 2, "col": 3}, {"row": 2, "col": 4}, {"row": 2, "col": 5}, {"row": 2, "col": 6}, 
+                {"row": 3, "col": 0}, {"row": 3, "col": 1}, {"row": 3, "col": 2}, {"row": 3, "col": 3}, {"row": 3, "col": 4}, {"row": 3, "col": 5}, {"row": 3, "col": 6}, 
+                {"row": 4, "col": 0}, {"row": 4, "col": 1}, {"row": 4, "col": 2}, {"row": 4, "col": 3}, {"row": 4, "col": 4}, {"row": 4, "col": 5}, {"row": 4, "col": 6}, 
+                {"row": 5, "col": 0}, {"row": 5, "col": 1}, {"row": 5, "col": 2}, {"row": 5, "col": 3}, {"row": 5, "col": 4}, {"row": 5, "col": 5}, {"row": 5, "col": 6}
                 ], 
-            'gameOver': False
+            "gameOver": false
             }"""
 
     g2.player_one = p1
     g2.player_two = p3
     g2.created_by = p1
     g2.persisted = """{
-            'gameId': 1, 
-            'p1': 
-                {'name': """+p1.username+""", 
-                'id': 1, 
-                'birthday': """+p1.birthday_format()+""", 
-                'isRedToken': False, 
-                'tokensRemaining': 21, 
-                'remainingToWin': 4, 
-                'winner': False
+            "gameId": 1, 
+            "p1": 
+                {"name": \""""+p1.username+"""\", 
+                "id": 1, 
+                "birthday": \""""+p1.birthday_format()+"""\", 
+                "isRedToken": false, 
+                "tokensRemaining": 21, 
+                "remainingToWin": 4, 
+                "winner": false
                 }, 
-            'p2': 
-                {'name': """+p3.username+""", 
-                'id': 3, 
-                'birthday': """+p3.birthday_format()+""", 
-                'isRedToken': True, 
-                'tokensRemaining': 21, 
-                'remainingToWin': 4, 
-                'winner': False
-                }, 
-            'turn': 1, 
-            'tokenState': [
-                {'row': 0, 'col': 0}, {'row': 0, 'col': 1}, {'row': 0, 'col': 2}, {'row': 0, 'col': 3}, {'row': 0, 'col': 4}, {'row': 0, 'col': 5}, {'row': 0, 'col': 6}, 
-                {'row': 1, 'col': 0}, {'row': 1, 'col': 1}, {'row': 1, 'col': 2}, {'row': 1, 'col': 3}, {'row': 1, 'col': 4}, {'row': 1, 'col': 5}, {'row': 1, 'col': 6}, 
-                {'row': 2, 'col': 0}, {'row': 2, 'col': 1}, {'row': 2, 'col': 2}, {'row': 2, 'col': 3}, {'row': 2, 'col': 4}, {'row': 2, 'col': 5}, {'row': 2, 'col': 6}, 
-                {'row': 3, 'col': 0}, {'row': 3, 'col': 1}, {'row': 3, 'col': 2}, {'row': 3, 'col': 3}, {'row': 3, 'col': 4}, {'row': 3, 'col': 5}, {'row': 3, 'col': 6}, 
-                {'row': 4, 'col': 0}, {'row': 4, 'col': 1}, {'row': 4, 'col': 2}, {'row': 4, 'col': 3}, {'row': 4, 'col': 4}, {'row': 4, 'col': 5}, {'row': 4, 'col': 6}, 
-                {'row': 5, 'col': 0}, {'row': 5, 'col': 1}, {'row': 5, 'col': 2}, {'row': 5, 'col': 3}, {'row': 5, 'col': 4}, {'row': 5, 'col': 5}, {'row': 5, 'col': 6}
+            "p2": 
+                {"name": \""""+p3.username+"""\", 
+                "id": 3, 
+                "birthday": \""""+p3.birthday_format()+"""\",
+                "isRedToken": true, 
+                "tokensRemaining": 21, 
+                "remainingToWin": 4, 
+                "winner": false
+                },
+            "turn": 1, 
+            "tokenState": [
+                {"row": 0, "col": 0}, {"row": 0, "col": 1}, {"row": 0, "col": 2}, {"row": 0, "col": 3}, {"row": 0, "col": 4}, {"row": 0, "col": 5}, {"row": 0, "col": 6}, 
+                {"row": 1, "col": 0}, {"row": 1, "col": 1}, {"row": 1, "col": 2}, {"row": 1, "col": 3}, {"row": 1, "col": 4}, {"row": 1, "col": 5}, {"row": 1, "col": 6}, 
+                {"row": 2, "col": 0}, {"row": 2, "col": 1}, {"row": 2, "col": 2}, {"row": 2, "col": 3}, {"row": 2, "col": 4}, {"row": 2, "col": 5}, {"row": 2, "col": 6}, 
+                {"row": 3, "col": 0}, {"row": 3, "col": 1}, {"row": 3, "col": 2}, {"row": 3, "col": 3}, {"row": 3, "col": 4}, {"row": 3, "col": 5}, {"row": 3, "col": 6}, 
+                {"row": 4, "col": 0}, {"row": 4, "col": 1}, {"row": 4, "col": 2}, {"row": 4, "col": 3}, {"row": 4, "col": 4}, {"row": 4, "col": 5}, {"row": 4, "col": 6}, 
+                {"row": 5, "col": 0}, {"row": 5, "col": 1}, {"row": 5, "col": 2}, {"row": 5, "col": 3}, {"row": 5, "col": 4}, {"row": 5, "col": 5}, {"row": 5, "col": 6}
                 ], 
-            'gameOver': False
+            "gameOver": false
             }"""
 
 
@@ -219,35 +218,35 @@ def init_dev_data():
     g3.player_two = p3
     g3.created_by = p2
     g3.persisted = """{
-            'gameId': 1, 
-            'p1': 
-                {'name': """+p2.username+""", 
-                'id': 2, 
-                'birthday': """+p2.birthday_format()+""", 
-                'isRedToken': False, 
-                'tokensRemaining': 21, 
-                'remainingToWin': 4, 
-                'winner': False
+            "gameId": 1, 
+            "p1": 
+                {"name": \""""+p2.username+"""\", 
+                "id": 2, 
+                "birthday": \""""+p2.birthday_format()+"""\", 
+                "isRedToken": false, 
+                "tokensRemaining": 21, 
+                "remainingToWin": 4, 
+                "winner": False
                 }, 
-            'p2': 
-                {'name': """+p3.username+""", 
-                'id': 3, 
-                'birthday': """+p3.birthday_format()+""", 
-                'isRedToken': True, 
-                'tokensRemaining': 21, 
-                'remainingToWin': 4, 
-                'winner': False
+            "p2": 
+                {"name": \""""+p3.username+"""\", 
+                "id": 3, 
+                "birthday": \""""+p3.birthday_format()+"""\",
+                "isRedToken": true, 
+                "tokensRemaining": 21, 
+                "remainingToWin": 4, 
+                "winner": False
                 }, 
-            'turn': 1, 
-            'tokenState': [
-                {'row': 0, 'col': 0}, {'row': 0, 'col': 1}, {'row': 0, 'col': 2}, {'row': 0, 'col': 3}, {'row': 0, 'col': 4}, {'row': 0, 'col': 5}, {'row': 0, 'col': 6}, 
-                {'row': 1, 'col': 0}, {'row': 1, 'col': 1}, {'row': 1, 'col': 2}, {'row': 1, 'col': 3}, {'row': 1, 'col': 4}, {'row': 1, 'col': 5}, {'row': 1, 'col': 6}, 
-                {'row': 2, 'col': 0}, {'row': 2, 'col': 1}, {'row': 2, 'col': 2}, {'row': 2, 'col': 3}, {'row': 2, 'col': 4}, {'row': 2, 'col': 5}, {'row': 2, 'col': 6}, 
-                {'row': 3, 'col': 0}, {'row': 3, 'col': 1}, {'row': 3, 'col': 2}, {'row': 3, 'col': 3}, {'row': 3, 'col': 4}, {'row': 3, 'col': 5}, {'row': 3, 'col': 6}, 
-                {'row': 4, 'col': 0}, {'row': 4, 'col': 1}, {'row': 4, 'col': 2}, {'row': 4, 'col': 3}, {'row': 4, 'col': 4}, {'row': 4, 'col': 5}, {'row': 4, 'col': 6}, 
-                {'row': 5, 'col': 0}, {'row': 5, 'col': 1}, {'row': 5, 'col': 2}, {'row': 5, 'col': 3}, {'row': 5, 'col': 4}, {'row': 5, 'col': 5}, {'row': 5, 'col': 6}
+            "turn": 1, 
+            "tokenState": [
+                {"row": 0, "col": 0}, {"row": 0, "col": 1}, {"row": 0, "col": 2}, {"row": 0, "col": 3}, {"row": 0, "col": 4}, {"row": 0, "col": 5}, {"row": 0, "col": 6}, 
+                {"row": 1, "col": 0}, {"row": 1, "col": 1}, {"row": 1, "col": 2}, {"row": 1, "col": 3}, {"row": 1, "col": 4}, {"row": 1, "col": 5}, {"row": 1, "col": 6}, 
+                {"row": 2, "col": 0}, {"row": 2, "col": 1}, {"row": 2, "col": 2}, {"row": 2, "col": 3}, {"row": 2, "col": 4}, {"row": 2, "col": 5}, {"row": 2, "col": 6}, 
+                {"row": 3, "col": 0}, {"row": 3, "col": 1}, {"row": 3, "col": 2}, {"row": 3, "col": 3}, {"row": 3, "col": 4}, {"row": 3, "col": 5}, {"row": 3, "col": 6}, 
+                {"row": 4, "col": 0}, {"row": 4, "col": 1}, {"row": 4, "col": 2}, {"row": 4, "col": 3}, {"row": 4, "col": 4}, {"row": 4, "col": 5}, {"row": 4, "col": 6}, 
+                {"row": 5, "col": 0}, {"row": 5, "col": 1}, {"row": 5, "col": 2}, {"row": 5, "col": 3}, {"row": 5, "col": 4}, {"row": 5, "col": 5}, {"row": 5, "col": 6}
                 ], 
-            'gameOver': False
+            "gameOver": false
             }"""
 
 
