@@ -11,9 +11,9 @@ class Player(db.Model):
 
     def birthday_format(self, format=None):
         if not format:
-            return datetime.date.strftime('%B %d, %Y', self.birthday)
+            return datetime.date.strftime(self.birthday, '%B %d, %Y')
         else:
-            return datetime.date.strftime(format, self.birthday)
+            return datetime.date.strftime(self.birthday, format)
 
     def games(self):
         return db.session.query(Game).filter(db.or_(

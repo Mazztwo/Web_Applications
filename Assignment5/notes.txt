@@ -20,7 +20,50 @@ Notes:
     - turn, game_over, winner_id
 
 
-current:
--inside function handlePoll(httpRequest) , need board to redraw after every poll
--this is based on the def poll(): and what it returns. does it return whats in the db or whats in local LocalStorage   
-    -what are we restoring from, db or local storage
+plan:
+-When a new game is loaded up, there probably won't be anything in local LocalStorage
+-when a poll happens, restore the game from what is in the db and redraw
+-when an update happens to the board, push update to db, and poll will redraw based on new data
+
+
+To Do:
+X Get empty "game" from local storage and set that to persisted in db
+X when initiaizing db data, make sure to set persisted to the empty game
+-make poll just pull data from request and redraw
+-when user changes board, send data to db and upadate representation
+
+
+
+
+
+{
+ 'gameId': 1, 
+ 'p1': 
+    {'name': 'p1', 
+     'id': 1, 
+     'birthday': '1991-11-06T00:00:00.000Z', 
+     'isRedToken': False, 
+     'tokensRemaining': 21, 
+     'remainingToWin': 4, 
+     'winner': False
+    }, 
+ 'p2': 
+    {'name': 'p2', 
+    'id': 2, 
+    'birthday': '1987-01-14T00:00:00.000Z', 
+    'isRedToken': True, 
+    'tokensRemaining': 21, 
+    'remainingToWin': 4, 
+    'winner': False
+    }, 
+ 'turn': 1, 
+ 'tokenState': [
+     {'row': 0, 'col': 0}, {'row': 0, 'col': 1}, {'row': 0, 'col': 2}, {'row': 0, 'col': 3}, {'row': 0, 'col': 4}, {'row': 0, 'col': 5}, {'row': 0, 'col': 6}, 
+     {'row': 1, 'col': 0}, {'row': 1, 'col': 1}, {'row': 1, 'col': 2}, {'row': 1, 'col': 3}, {'row': 1, 'col': 4}, {'row': 1, 'col': 5}, {'row': 1, 'col': 6}, 
+     {'row': 2, 'col': 0}, {'row': 2, 'col': 1}, {'row': 2, 'col': 2}, {'row': 2, 'col': 3}, {'row': 2, 'col': 4}, {'row': 2, 'col': 5}, {'row': 2, 'col': 6}, 
+     {'row': 3, 'col': 0}, {'row': 3, 'col': 1}, {'row': 3, 'col': 2}, {'row': 3, 'col': 3}, {'row': 3, 'col': 4}, {'row': 3, 'col': 5}, {'row': 3, 'col': 6}, 
+     {'row': 4, 'col': 0}, {'row': 4, 'col': 1}, {'row': 4, 'col': 2}, {'row': 4, 'col': 3}, {'row': 4, 'col': 4}, {'row': 4, 'col': 5}, {'row': 4, 'col': 6}, 
+     {'row': 5, 'col': 0}, {'row': 5, 'col': 1}, {'row': 5, 'col': 2}, {'row': 5, 'col': 3}, {'row': 5, 'col': 4}, {'row': 5, 'col': 5}, {'row': 5, 'col': 6}
+     ], 
+  'gameOver': False
+}

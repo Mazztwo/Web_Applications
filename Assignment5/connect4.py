@@ -109,6 +109,8 @@ def poll():
     curr_game.persisted = request.form["game"]
     db.session.commit()
     
+    print (json_game)
+
     return json.dumps(request.form["game"])
 
 # CLI Commands
@@ -145,14 +147,109 @@ def init_dev_data():
     g1.player_one = p1
     g1.player_two = p2
     g1.created_by = p1
+    g1.persisted = """{
+            'gameId': 1, 
+            'p1': 
+                {'name': """+p1.username+""", 
+                'id': 1, 
+                'birthday': """+p1.birthday_format()+""", 
+                'isRedToken': False, 
+                'tokensRemaining': 21, 
+                'remainingToWin': 4, 
+                'winner': False
+                }, 
+            'p2': 
+                {'name': """+p2.username+""", 
+                'id': 2, 
+                'birthday': """+p2.birthday_format()+""",
+                'isRedToken': True, 
+                'tokensRemaining': 21, 
+                'remainingToWin': 4, 
+                'winner': False
+                }, 
+            'turn': 1, 
+            'tokenState': [
+                {'row': 0, 'col': 0}, {'row': 0, 'col': 1}, {'row': 0, 'col': 2}, {'row': 0, 'col': 3}, {'row': 0, 'col': 4}, {'row': 0, 'col': 5}, {'row': 0, 'col': 6}, 
+                {'row': 1, 'col': 0}, {'row': 1, 'col': 1}, {'row': 1, 'col': 2}, {'row': 1, 'col': 3}, {'row': 1, 'col': 4}, {'row': 1, 'col': 5}, {'row': 1, 'col': 6}, 
+                {'row': 2, 'col': 0}, {'row': 2, 'col': 1}, {'row': 2, 'col': 2}, {'row': 2, 'col': 3}, {'row': 2, 'col': 4}, {'row': 2, 'col': 5}, {'row': 2, 'col': 6}, 
+                {'row': 3, 'col': 0}, {'row': 3, 'col': 1}, {'row': 3, 'col': 2}, {'row': 3, 'col': 3}, {'row': 3, 'col': 4}, {'row': 3, 'col': 5}, {'row': 3, 'col': 6}, 
+                {'row': 4, 'col': 0}, {'row': 4, 'col': 1}, {'row': 4, 'col': 2}, {'row': 4, 'col': 3}, {'row': 4, 'col': 4}, {'row': 4, 'col': 5}, {'row': 4, 'col': 6}, 
+                {'row': 5, 'col': 0}, {'row': 5, 'col': 1}, {'row': 5, 'col': 2}, {'row': 5, 'col': 3}, {'row': 5, 'col': 4}, {'row': 5, 'col': 5}, {'row': 5, 'col': 6}
+                ], 
+            'gameOver': False
+            }"""
 
     g2.player_one = p1
     g2.player_two = p3
     g2.created_by = p1
+    g2.persisted = """{
+            'gameId': 1, 
+            'p1': 
+                {'name': """+p1.username+""", 
+                'id': 1, 
+                'birthday': """+p1.birthday_format()+""", 
+                'isRedToken': False, 
+                'tokensRemaining': 21, 
+                'remainingToWin': 4, 
+                'winner': False
+                }, 
+            'p2': 
+                {'name': """+p3.username+""", 
+                'id': 3, 
+                'birthday': """+p3.birthday_format()+""", 
+                'isRedToken': True, 
+                'tokensRemaining': 21, 
+                'remainingToWin': 4, 
+                'winner': False
+                }, 
+            'turn': 1, 
+            'tokenState': [
+                {'row': 0, 'col': 0}, {'row': 0, 'col': 1}, {'row': 0, 'col': 2}, {'row': 0, 'col': 3}, {'row': 0, 'col': 4}, {'row': 0, 'col': 5}, {'row': 0, 'col': 6}, 
+                {'row': 1, 'col': 0}, {'row': 1, 'col': 1}, {'row': 1, 'col': 2}, {'row': 1, 'col': 3}, {'row': 1, 'col': 4}, {'row': 1, 'col': 5}, {'row': 1, 'col': 6}, 
+                {'row': 2, 'col': 0}, {'row': 2, 'col': 1}, {'row': 2, 'col': 2}, {'row': 2, 'col': 3}, {'row': 2, 'col': 4}, {'row': 2, 'col': 5}, {'row': 2, 'col': 6}, 
+                {'row': 3, 'col': 0}, {'row': 3, 'col': 1}, {'row': 3, 'col': 2}, {'row': 3, 'col': 3}, {'row': 3, 'col': 4}, {'row': 3, 'col': 5}, {'row': 3, 'col': 6}, 
+                {'row': 4, 'col': 0}, {'row': 4, 'col': 1}, {'row': 4, 'col': 2}, {'row': 4, 'col': 3}, {'row': 4, 'col': 4}, {'row': 4, 'col': 5}, {'row': 4, 'col': 6}, 
+                {'row': 5, 'col': 0}, {'row': 5, 'col': 1}, {'row': 5, 'col': 2}, {'row': 5, 'col': 3}, {'row': 5, 'col': 4}, {'row': 5, 'col': 5}, {'row': 5, 'col': 6}
+                ], 
+            'gameOver': False
+            }"""
+
 
     g3.player_one = p2
     g3.player_two = p3
     g3.created_by = p2
+    g3.persisted = """{
+            'gameId': 1, 
+            'p1': 
+                {'name': """+p2.username+""", 
+                'id': 2, 
+                'birthday': """+p2.birthday_format()+""", 
+                'isRedToken': False, 
+                'tokensRemaining': 21, 
+                'remainingToWin': 4, 
+                'winner': False
+                }, 
+            'p2': 
+                {'name': """+p3.username+""", 
+                'id': 3, 
+                'birthday': """+p3.birthday_format()+""", 
+                'isRedToken': True, 
+                'tokensRemaining': 21, 
+                'remainingToWin': 4, 
+                'winner': False
+                }, 
+            'turn': 1, 
+            'tokenState': [
+                {'row': 0, 'col': 0}, {'row': 0, 'col': 1}, {'row': 0, 'col': 2}, {'row': 0, 'col': 3}, {'row': 0, 'col': 4}, {'row': 0, 'col': 5}, {'row': 0, 'col': 6}, 
+                {'row': 1, 'col': 0}, {'row': 1, 'col': 1}, {'row': 1, 'col': 2}, {'row': 1, 'col': 3}, {'row': 1, 'col': 4}, {'row': 1, 'col': 5}, {'row': 1, 'col': 6}, 
+                {'row': 2, 'col': 0}, {'row': 2, 'col': 1}, {'row': 2, 'col': 2}, {'row': 2, 'col': 3}, {'row': 2, 'col': 4}, {'row': 2, 'col': 5}, {'row': 2, 'col': 6}, 
+                {'row': 3, 'col': 0}, {'row': 3, 'col': 1}, {'row': 3, 'col': 2}, {'row': 3, 'col': 3}, {'row': 3, 'col': 4}, {'row': 3, 'col': 5}, {'row': 3, 'col': 6}, 
+                {'row': 4, 'col': 0}, {'row': 4, 'col': 1}, {'row': 4, 'col': 2}, {'row': 4, 'col': 3}, {'row': 4, 'col': 4}, {'row': 4, 'col': 5}, {'row': 4, 'col': 6}, 
+                {'row': 5, 'col': 0}, {'row': 5, 'col': 1}, {'row': 5, 'col': 2}, {'row': 5, 'col': 3}, {'row': 5, 'col': 4}, {'row': 5, 'col': 5}, {'row': 5, 'col': 6}
+                ], 
+            'gameOver': False
+            }"""
+
 
     db.session.commit()
     print("Added dummy data.") 
