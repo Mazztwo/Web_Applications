@@ -23,7 +23,9 @@ def landing_page(id):
         Game.player_two_id==int(id)
         )).all()
 
-    # get top 10 games
+    community_games = Game.query.filter().all()
+
+    # get top games
     wins = {}
     for game in games:
         if (game.winner_id == int(id)):
@@ -32,15 +34,22 @@ def landing_page(id):
     # sort 
     wins = [(k, wins[k]) for k in sorted(wins, key=wins.get, reverse=True)]
 
-    print("WINS ", wins)
+    # get top games
+    community_wins = {}
+    for game in community_games:
+        if(game.game_over == 1):
+            community_wins[game.id] = game.turn
 
-    # wins = {game_id:turns, .....}
+    # sort 
+    community_wins = [(k, community_wins[k]) for k in sorted(community_wins, key=community_wins.get, reverse=True)]
 
     return render_template("landing.html", 
                             games=games, 
                             curr_user=Player.query.filter_by(id=int(id)).first(), 
                             wins=wins,
-                            len=len(wins))
+                            len=len(wins),
+                            com_wins=community_wins,
+                            com_len=len(community_wins))
 
 @app.route("/account-creation-page/")
 def account_creation_page():

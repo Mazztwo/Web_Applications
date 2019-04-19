@@ -53,12 +53,21 @@
 </div>
 <div>   
     <h2>Community Top 10 Scores:</h2>
-    {% if games %}
     <table>
-        {% for row in range(10) %}
+        {% for g_id, score in com_wins %}
             <tr>
                 <td>    
-                   --
+                    {{score}} ---
+                </td>
+                <td>
+                    --- <a href="{{ url_for('game', game_id = g_id, curr_user = curr_user.id)}}">Link to Game</a>
+                <td>
+            </tr>
+        {% endfor %}
+        {% for i in range(10-com_len) %}
+            <tr>
+                <td>    
+                    -- 
                 </td>
                 <td>
                     <a href="">Link to Game</a>
@@ -66,10 +75,7 @@
             </tr>
         {% endfor %}
     </table>
-    {% else %}
-    <p>Currently, there are no games available to play.</p>
-    {% endif %}
-</div>
+    </div>
 <br>
 <br>
 <div>
