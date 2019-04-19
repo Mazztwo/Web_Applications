@@ -22,7 +22,25 @@ def landing_page(id):
         Game.player_one_id==int(id), 
         Game.player_two_id==int(id)
         )).all()
-    return render_template("landing.html", games=games, curr_user=Player.query.filter_by(id=int(id)).first())
+
+    # get top 10 games
+    wins = {}
+    for game in games:
+        if (game.winner_id == int(id)):
+            wins[game.id] = game.turn
+
+    # sort 
+    wins = [(k, wins[k]) for k in sorted(wins, key=wins.get, reverse=True)]
+
+    print("WINS ", wins)
+
+    # wins = {game_id:turns, .....}
+
+    return render_template("landing.html", 
+                            games=games, 
+                            curr_user=Player.query.filter_by(id=int(id)).first(), 
+                            wins=wins,
+                            len=len(wins))
 
 @app.route("/account-creation-page/")
 def account_creation_page():

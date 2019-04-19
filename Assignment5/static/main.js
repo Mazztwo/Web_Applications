@@ -237,12 +237,14 @@ function Connect4(p1, p2, gameId) {
     this.titleWin = function() {
         if (this.gameOver) {
             var winText = document.getElementById('title').textContent;
-            if (this.p1.winner) {
-                winText = winText + ": " + this.p1.name + " Wins!";
-            } else {
-                winText = winText + ": " + this.p2.name + " Wins!";
+            if(winText.search(" Wins!") == -1)
+            {
+                if (this.p1.winner) {
+                    winText = winText + ": " + this.p1.name + " Wins!";
+                } else {
+                    winText = winText + ": " + this.p2.name + " Wins!";
+                }
             }
-
             document.getElementById('title').textContent = winText;
         }
     }
@@ -362,20 +364,34 @@ function Connect4(p1, p2, gameId) {
                         // Get http response
                         var board = JSON.parse(httpRequest.responseText);
 
-                        console.log(board);
-
                         self.gameOver = board.gameOver;
                         self.turn = board.turn;
                         self.tokenState = board.tokenState;
                         self.p1 = board.p1;
                         self.p2 = board.p2;
 
-                        // Re-render just board on all browsers
+                        // Re-render board on all browsers
                         var canvas = document.getElementById("gameboard")
                         var board = document.getElementById("connect-table");
                         canvas.removeChild(board);
+
+                        
+                        var disp1 = document.getElementById('p1-display');
+                        var disp2 = document.getElementById('p2-display');
+
+                        while (disp1.firstChild) 
+                        {
+                            disp1.removeChild(disp1.firstChild);
+                        }
+                        while (disp2.firstChild) 
+                        {
+                            disp2.removeChild(disp2.firstChild);
+                        }
+
                         self.makeBoard();
-                
+                        self.makePlayerDisplay(self.p1);
+                        self.makePlayerDisplay(self.p2);
+
                         timeoutID = window.setTimeout(poller, timeout);	
                     } 
                 }
