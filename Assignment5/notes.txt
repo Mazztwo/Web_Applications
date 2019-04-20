@@ -1,7 +1,6 @@
 To run:
 export FLASK_APP='connect4.py' 
 flask initdb 
-export FLASK_DEBUG=1; 
 flask run
 
 
@@ -26,14 +25,14 @@ plan:
 -when an update happens to the board, push update to db, and poll will redraw based on new data
 
 
-To Do:
+Done:
 X Get empty "game" from local storage and set that to persisted in db
 X when initiaizing db data, make sure to set persisted to the empty game
 X make poll just pull data from request and redraw
 X when user changes board, send data to db and upadate representation
 
-
-
+To Do:
+Data is sent to server/local storage correctly. Second browser isn't drawing board properly
 
 
 {
