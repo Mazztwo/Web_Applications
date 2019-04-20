@@ -17,5 +17,28 @@
         <input type="submit" value="Create New Account"/>
     </form>
 </div>
+<br>
+<br>
+<div>   
+        <h1>Community Top 10 Scores:</h1>
+        <table>
+            <th>Score</th>
+            {% for g_id, score in com_wins %}
+                <tr>
+                    <td>    
+                        {{score}}
+                    </td>
+                </tr>
+            {% endfor %}
+            {% for i in range(10-com_len) %}
+                <tr>
+                    <td>    
+                        -- 
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+</div>
+   
 
 {% endblock %}

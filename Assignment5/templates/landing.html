@@ -11,9 +11,27 @@
         padding: 5px;
     }
 </style>
+
 <h1>Welcome, {{ curr_user.username }}</h1>
 
-<h2>Your Games</h2>
+<div>
+    <h2>Create New Game (select opponent)</h2>
+        <form action="{{ url_for('create_game_logic', curr_user_id=curr_user.id) }}" method="post">
+            <select name='opponent_id'>
+                    <option value="" selected="selected" hidden="hidden">Choose Opponent</option>
+                    {%for player in players%}
+                        {%if player.id != curr_user.id%}
+                            <option value={{player.id}}>{{player.username}}</option>
+                        {%endif%}
+                    {%endfor%}
+            </select>
+            <input type='submit' value='Create Game'/>
+        </form>
+</div>
+
+
+
+<h2>Your Games (click link to visit game)</h2>
 {% if games %}
 <table style="border-collapse: collapse; width: 20%">
     {% for game in games %}

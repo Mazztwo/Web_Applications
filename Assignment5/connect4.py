@@ -14,7 +14,21 @@ db.init_app(app)
 
 @app.route("/")
 def login_page():
-    return render_template("login.html")
+    community_games = Game.query.filter().all()
+
+    # get top games
+    community_wins = {}
+    for game in community_games:
+        if(game.game_over == 1):
+            community_wins[game.id] = game.turn
+
+    # sort 
+    community_wins = [(k, community_wins[k]) for k in sorted(community_wins, key=community_wins.get)]
+
+    return render_template("login.html", 
+                            com_wins=community_wins,
+                            com_len=len(community_wins),
+                            com_games=community_games)
 
 @app.route("/landing/<id>")
 def landing_page(id):
@@ -71,6 +85,57 @@ def create_account_logic():
     db.session.commit()
 
     return redirect(url_for("login_page"))
+
+@app.route("/create-game/<curr_user_id>", methods=['POST'])
+def create_game_logic(curr_user_id):
+
+    # Create new game and place into database
+    new_game = Game()
+    db.session.add(new_game)
+
+    p1 = Player.query.filter_by(id=int(curr_user_id)).first()
+    p2 = Player.query.filter_by(id=int(request.form["opponent_id"])).first()
+
+    new_id = str(len(Game.query.filter().all()) + 1)
+
+    new_game.player_one = p1
+    new_game.player_two = p2
+    new_game.created_by = p1
+    new_game.persisted = """{
+            "gameId": """+new_id+""", 
+            "p1": 
+                {"name": \""""+p1.username+"""\", 
+                "id": 1, 
+                "birthday": \""""+p1.birthday_format()+"""\", 
+                "isRedToken": false, 
+                "tokensRemaining": 21, 
+                "remainingToWin": 4, 
+                "winner": false
+                }, 
+            "p2": 
+                {"name": \""""+p2.username+"""\", 
+                "id": 2, 
+                "birthday": \""""+p2.birthday_format()+"""\",
+                "isRedToken": true, 
+                "tokensRemaining": 21, 
+                "remainingToWin": 4, 
+                "winner": false
+                }, 
+            "turn": 1, 
+            "tokenState": [
+                {"row": 0, "col": 0}, {"row": 0, "col": 1}, {"row": 0, "col": 2}, {"row": 0, "col": 3}, {"row": 0, "col": 4}, {"row": 0, "col": 5}, {"row": 0, "col": 6}, 
+                {"row": 1, "col": 0}, {"row": 1, "col": 1}, {"row": 1, "col": 2}, {"row": 1, "col": 3}, {"row": 1, "col": 4}, {"row": 1, "col": 5}, {"row": 1, "col": 6}, 
+                {"row": 2, "col": 0}, {"row": 2, "col": 1}, {"row": 2, "col": 2}, {"row": 2, "col": 3}, {"row": 2, "col": 4}, {"row": 2, "col": 5}, {"row": 2, "col": 6}, 
+                {"row": 3, "col": 0}, {"row": 3, "col": 1}, {"row": 3, "col": 2}, {"row": 3, "col": 3}, {"row": 3, "col": 4}, {"row": 3, "col": 5}, {"row": 3, "col": 6}, 
+                {"row": 4, "col": 0}, {"row": 4, "col": 1}, {"row": 4, "col": 2}, {"row": 4, "col": 3}, {"row": 4, "col": 4}, {"row": 4, "col": 5}, {"row": 4, "col": 6}, 
+                {"row": 5, "col": 0}, {"row": 5, "col": 1}, {"row": 5, "col": 2}, {"row": 5, "col": 3}, {"row": 5, "col": 4}, {"row": 5, "col": 5}, {"row": 5, "col": 6}
+                ], 
+            "gameOver": false
+            }"""
+
+    db.session.commit()
+    
+    return redirect(url_for('landing_page', id=curr_user_id))
 
 @app.route("/login-logic/", methods=['POST'])
 def landing_page_logic():
